@@ -1,5 +1,19 @@
 ---
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+const routeTableBody = `
+<tr><td>/</td><td>pages/[...page].astro</td><td>首页，带分页（每页 8 篇）</td></tr>
+<tr><td>/posts/{slug}/</td><td>pages/posts/[...slug].astro</td><td>博客文章</td></tr>
+<tr><td>/archive/</td><td>pages/archive.astro</td><td>归档页，按年份分组</td></tr>
+<tr><td>/about/</td><td>pages/about.astro</td><td>关于页</td></tr>
+<tr><td>/kb/</td><td>pages/kb/index.astro</td><td>知识库首页，展示分类卡片</td></tr>
+<tr><td>/kb/{category}/</td><td>pages/kb/[category].astro</td><td>分类文章列表</td></tr>
+<tr><td>/kb/{category}/{article}/</td><td>pages/kb/[category]/[article].astro</td><td>知识库文章</td></tr>
+<tr><td>/docs/</td><td>pages/docs/index.astro</td><td>项目文档首页</td></tr>
+<tr><td>/docs/{page}/</td><td>pages/docs/{page}.astro</td><td>各文档页</td></tr>
+<tr><td>/rss.xml</td><td>pages/rss.xml.ts</td><td>RSS 订阅源</td></tr>
+<tr><td>/robots.txt</td><td>pages/robots.txt.ts</td><td>爬虫规则</td></tr>
+`;
 ---
 <MainGridLayout title="架构文档" description="项目架构、目录职责、数据模型、路由表">
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
@@ -26,17 +40,17 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 					<tr><td><code>src/content/kb/</code></td><td>知识库，按分类建子目录</td><td>一级子目录名 = 分类名；文件名不含日期前缀，写主题名</td></tr>
 					<tr><td><code>src/content/spec/</code></td><td>固定页面（About 等）</td><td>文件名即页面标识，由对应路由页手动 <code>getEntry</code> 取用</td></tr>
 					<tr><td><code>src/pages/</code></td><td>Astro 文件路由，每个 <code>.astro</code> 对应一个 URL</td><td>动态路由用 <code>[param].astro</code>，需实现 <code>getStaticPaths</code></td></tr>
-					<tr><td><code>src/pages/kb/</code></td><td>知识库路由层（index + 分类 + 文章）</td><td>三文件结构不可合并，<code>[category]</code> 与 <code>[category]/[article]</code> 各司其职</td></tr>
+					<tr><td><code>src/pages/kb/</code></td><td>知识库路由层（index + 分类 + 文章）</td><td>三文件结构不可合并</td></tr>
 					<tr><td><code>src/pages/docs/</code></td><td>项目文档路由层</td><td>每页独立 <code>.astro</code> 文件，内容直写模板</td></tr>
 					<tr><td><code>src/layouts/</code></td><td>页面级布局组件</td><td><code>MainGridLayout</code> 是通用壳；<code>Layout</code> 是最外层 HTML</td></tr>
-					<tr><td><code>src/components/</code></td><td>可复用 UI 组件</td><td>按 <code>control/</code>（控制类）<code>misc/</code>（杂项）<code>widget/</code>（侧边栏小组件）分组</td></tr>
+					<tr><td><code>src/components/</code></td><td>可复用 UI 组件</td><td>按 control / misc / widget 分组</td></tr>
 					<tr><td><code>src/plugins/</code></td><td>Remark / Rehype 插件、Expressive Code 插件</td><td>只处理 Markdown AST / 代码块渲染，不涉及 UI</td></tr>
 					<tr><td><code>src/styles/</code></td><td>全局 CSS / Stylus 变量</td><td><code>variables.styl</code> 定义主题色、间距等 CSS 变量</td></tr>
 					<tr><td><code>src/constants/</code></td><td>运行时常量（主题模式、分页大小、布局参数）</td><td>不依赖任何模块，可被任意文件 import</td></tr>
 					<tr><td><code>src/types/</code></td><td>TypeScript 类型定义</td><td><code>config.ts</code> 内定义了所有配置项的类型</td></tr>
 					<tr><td><code>src/utils/</code></td><td>工具函数（内容排序、URL 拼接、日期格式化、主题读写）</td><td>无副作用纯函数，不操作 DOM</td></tr>
 					<tr><td><code>src/i18n/</code></td><td>国际化翻译表</td><td>新增语言在 <code>languages/</code> 下建文件，key 在 <code>i18nKey.ts</code> 声明</td></tr>
-					<tr><td><code>src/assets/</code></td><td>静态资源（头像、Banner 图）</td><td>仅放置被 <code>import</code> 或 <code>ImageWrapper</code> 引用的图片</td></tr>
+					<tr><td><code>src/assets/</code></td><td>静态资源（头像、Banner 图）</td><td>仅放置被 import 或 ImageWrapper 引用的图片</td></tr>
 				</tbody>
 			</table>
 
@@ -51,19 +65,19 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 				<tbody>
 					<tr><td><code>title</code></td><td>string</td><td>是</td><td>-</td><td>文章标题，同时用作 HTML title 和 OG 标签</td></tr>
 					<tr><td><code>published</code></td><td>date</td><td>是</td><td>-</td><td>发布日期，决定文章排序</td></tr>
-					<tr><td><code>updated</code></td><td>date</td><td>否</td><td>-</td><td>最后修改日期，显示在文章元数据中</td></tr>
+					<tr><td><code>updated</code></td><td>date</td><td>否</td><td>-</td><td>最后修改日期</td></tr>
 					<tr><td><code>draft</code></td><td>boolean</td><td>否</td><td>false</td><td>草稿不会出现在首页列表和 RSS 中</td></tr>
-					<tr><td><code>description</code></td><td>string</td><td>否</td><td>""</td><td>文章摘要，用于列表卡片和 SEO description</td></tr>
-					<tr><td><code>image</code></td><td>string</td><td>否</td><td>""</td><td>封面图路径，相对于 <code>src/content/posts/</code></td></tr>
-					<tr><td><code>tags</code></td><td>string[]</td><td>否</td><td>[]</td><td>标签列表，用于标签筛选和侧边栏标签云</td></tr>
-					<tr><td><code>category</code></td><td>string</td><td>否</td><td>""</td><td>单一分类，显示在文章元数据中</td></tr>
+					<tr><td><code>description</code></td><td>string</td><td>否</td><td>""</td><td>文章摘要，用于列表卡片和 SEO</td></tr>
+					<tr><td><code>image</code></td><td>string</td><td>否</td><td>""</td><td>封面图路径，相对于 posts 目录</td></tr>
+					<tr><td><code>tags</code></td><td>string[]</td><td>否</td><td>[]</td><td>标签列表，用于标签筛选和侧边栏</td></tr>
+					<tr><td><code>category</code></td><td>string</td><td>否</td><td>""</td><td>单一分类</td></tr>
 					<tr><td><code>lang</code></td><td>string</td><td>否</td><td>""</td><td>文章语言，空则继承站点默认语言</td></tr>
 				</tbody>
 			</table>
 
 			<h3>3.2 kb（知识库）</h3>
-			<p>文件路径：<code>src/content/kb/&#123;'&#123;'&#125;category&#123;'''&#125;'&#125;/*.md</code></p>
-			<p>分类由一级子目录名决定，不支持嵌套分类。文件名不含日期前缀，直接写主题名（如 <code>aes-modes.md</code>）。</p>
+			<p>文件路径：<code>src/content/kb/</code> 下按分类建子目录，如 <code>密码学/aes-modes.md</code></p>
+			<p>分类由一级子目录名决定，不支持嵌套。文件名不含日期前缀，直接写主题名。</p>
 			<table>
 				<thead><tr><th>字段</th><th>类型</th><th>必填</th><th>默认值</th><th>说明</th></tr></thead>
 				<tbody>
@@ -81,22 +95,9 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 			<hr class="my-8 border-[var(--border-color)]" />
 
 			<h2 id="routes">4. 路由表</h2>
-
 			<table>
 				<thead><tr><th>URL</th><th>文件</th><th>说明</th></tr></thead>
-				<tbody>
-					<tr><td><code>/</code></td><td><code>pages/[...page].astro</code></td><td>首页，带分页（每页 8 篇）</td></tr>
-					<tr><td><code>/posts/&#123;'&#123;'&#125;slug&#123;'&#125;'&#125;/</code></td><td><code>pages/posts/[...slug].astro</code></td><td>博客文章</td></tr>
-					<tr><td><code>/archive/</code></td><td><code>pages/archive.astro</code></td><td>归档页，按年份分组</td></tr>
-					<tr><td><code>/about/</code></td><td><code>pages/about.astro</code></td><td>关于页，渲染 <code>spec/about.md</code></td></tr>
-					<tr><td><code>/kb/</code></td><td><code>pages/kb/index.astro</code></td><td>知识库首页，展示分类卡片</td></tr>
-					<tr><td><code>/kb/&#123;'&#123;'&#125;category&#123;'&#125;'&#125;/</code></td><td><code>pages/kb/[category].astro</code></td><td>分类文章列表</td></tr>
-					<tr><td><code>/kb/&#123;category&#125;/&#123;'&#123;'&#125;article&#123;'&#125;'&#125;/</code></td><td><code>pages/kb/[category]/[article].astro</code></td><td>知识库文章</td></tr>
-					<tr><td><code>/docs/</code></td><td><code>pages/docs/index.astro</code></td><td>项目文档首页</td></tr>
-					<tr><td><code>/docs/&#123;'&#123;'&#125;page&#123;'&#125;'&#125;/</code></td><td><code>pages/docs/&#123;'&#123;'&#125;page&#123;'&#125;'&#125;.astro</code></td><td>各文档页（静态 .astro 文件）</td></tr>
-					<tr><td><code>/rss.xml</code></td><td><code>pages/rss.xml.ts</code></td><td>RSS 订阅源</td></tr>
-					<tr><td><code>/robots.txt</code></td><td><code>pages/robots.txt.ts</code></td><td>爬虫规则</td></tr>
-				</tbody>
+				<tbody set:html={routeTableBody}></tbody>
 			</table>
 
 			<hr class="my-8 border-[var(--border-color)]" />
@@ -109,7 +110,7 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 				<thead><tr><th>字段</th><th>类型</th><th>当前值</th><th>说明</th></tr></thead>
 				<tbody>
 					<tr><td><code>title</code></td><td>string</td><td>棋密</td><td>站点名称</td></tr>
-					<tr><td><code>subtitle</code></td><td>string</td><td>Network Security · Cryptography · AI Security</td><td>副标题，显示在首页和浏览器 title</td></tr>
+					<tr><td><code>subtitle</code></td><td>string</td><td>Network Security · Cryptography · AI Security</td><td>副标题</td></tr>
 					<tr><td><code>lang</code></td><td>string</td><td>zh_CN</td><td>默认语言代码</td></tr>
 					<tr><td><code>themeColor.hue</code></td><td>number</td><td>160</td><td>主题色色相（0-360）</td></tr>
 					<tr><td><code>themeColor.fixed</code></td><td>boolean</td><td>false</td><td>是否禁用访客自行调整主题色</td></tr>
@@ -120,41 +121,39 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 			</table>
 
 			<h3>navBarConfig</h3>
-			<p>导航栏链接数组。内置预设：<code>LinkPreset.Home</code>、<code>LinkPreset.Archive</code>、<code>LinkPreset.About</code>。自定义链接字段：<code>name</code>（显示文字）、<code>url</code>（地址）、<code>external</code>（是否外部链接）。</p>
+			<p>导航栏链接数组。内置预设：Home、Archive、About。自定义链接字段：name（显示文字）、url（地址）、external（是否外部链接）。</p>
 
 			<h3>profileConfig</h3>
 			<table>
 				<thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead>
 				<tbody>
-					<tr><td><code>avatar</code></td><td>string</td><td>头像路径，相对于 <code>src/</code></td></tr>
+					<tr><td><code>avatar</code></td><td>string</td><td>头像路径，相对于 src/</td></tr>
 					<tr><td><code>name</code></td><td>string</td><td>昵称，显示在侧边栏</td></tr>
 					<tr><td><code>bio</code></td><td>string</td><td>简介，显示在侧边栏</td></tr>
-					<tr><td><code>links</code></td><td>array</td><td>社交链接，每项包含 <code>name</code> <code>url</code> <code>icon</code></td></tr>
+					<tr><td><code>links</code></td><td>array</td><td>社交链接，每项包含 name url icon</td></tr>
 				</tbody>
 			</table>
 
 			<hr class="my-8 border-[var(--border-color)]" />
 
 			<h2 id="plugins">6. 插件清单</h2>
-
 			<table>
 				<thead><tr><th>插件</th><th>类型</th><th>作用</th></tr></thead>
 				<tbody>
-					<tr><td><code>remark-mermaid</code></td><td>Remark</td><td>将 <code>```mermaid</code> 代码块转为 <code>&lt;div class="mermaid"&gt;</code></td></tr>
-					<tr><td><code>remark-math</code></td><td>Remark</td><td>解析 <code>$...$</code> 和 <code>$$...$$</code> 数学公式</td></tr>
-					<tr><td><code>rehype-katex</code></td><td>Rehype</td><td>将数学公式 AST 渲染为 KaTeX HTML + CSS</td></tr>
-					<tr><td><code>remark-reading-time</code></td><td>Remark</td><td>计算文章字数与阅读时间</td></tr>
-					<tr><td><code>remark-excerpt</code></td><td>Remark</td><td>提取文章摘要</td></tr>
-					<tr><td><code>remark-directive</code></td><td>Remark</td><td>解析 <code>:::note</code> 等自定义指令</td></tr>
-					<tr><td><code>remark-sectionize</code></td><td>Remark</td><td>将标题之间的内容包裹为 <code>&lt;section&gt;</code></td></tr>
-					<tr><td><code>rehype-slug</code></td><td>Rehype</td><td>为标题生成 id，用于锚点链接和 TOC</td></tr>
-					<tr><td><code>rehype-autolink-headings</code></td><td>Rehype</td><td>为标题自动添加 <code>#</code> 锚点链接</td></tr>
-					<tr><td><code>astro-expressive-code</code></td><td>Integration</td><td>代码块语法高亮，支持行号、折叠、语言标记</td></tr>
-					<tr><td><code>@astrojs/svelte</code></td><td>Integration</td><td>Svelte 组件支持（搜索框、明暗切换等）</td></tr>
-					<tr><td><code>@astrojs/tailwind</code></td><td>Integration</td><td>Tailwind CSS 集成</td></tr>
-					<tr><td><code>@astrojs/sitemap</code></td><td>Integration</td><td>自动生成 sitemap.xml</td></tr>
-					<tr><td><code>@swup/astro</code></td><td>Integration</td><td>页面切换动画</td></tr>
-					<tr><td><code>astro-icon</code></td><td>Integration</td><td>按需加载 SVG 图标</td></tr>
+					<tr><td>remark-mermaid</td><td>Remark</td><td>将 mermaid 代码块转为 HTML</td></tr>
+					<tr><td>remark-math + rehype-katex</td><td>Remark + Rehype</td><td>LaTeX 数学公式渲染</td></tr>
+					<tr><td>remark-reading-time</td><td>Remark</td><td>计算字数与阅读时间</td></tr>
+					<tr><td>remark-excerpt</td><td>Remark</td><td>提取文章摘要</td></tr>
+					<tr><td>remark-directive</td><td>Remark</td><td>解析自定义指令（note/tip/warning）</td></tr>
+					<tr><td>remark-sectionize</td><td>Remark</td><td>标题间内容包裹为 section</td></tr>
+					<tr><td>rehype-slug</td><td>Rehype</td><td>标题生成 id，用于锚点和 TOC</td></tr>
+					<tr><td>rehype-autolink-headings</td><td>Rehype</td><td>自动添加标题锚点链接</td></tr>
+					<tr><td>astro-expressive-code</td><td>Integration</td><td>代码块语法高亮（行号、折叠）</td></tr>
+					<tr><td>@astrojs/svelte</td><td>Integration</td><td>Svelte 组件（搜索框、明暗切换）</td></tr>
+					<tr><td>@astrojs/tailwind</td><td>Integration</td><td>Tailwind CSS 集成</td></tr>
+					<tr><td>@astrojs/sitemap</td><td>Integration</td><td>自动生成 sitemap.xml</td></tr>
+					<tr><td>@swup/astro</td><td>Integration</td><td>页面切换动画</td></tr>
+					<tr><td>astro-icon</td><td>Integration</td><td>按需加载 SVG 图标</td></tr>
 				</tbody>
 			</table>
 
@@ -163,32 +162,29 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 			<h2 id="new-page">7. 新增功能指南</h2>
 
 			<h3>新增博客文章</h3>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`pnpm new-post my-article-name
-# → 编辑 src/content/posts/my-article-name.md
-# → pnpm dev 预览
-# → git add . && git commit -m "新文章" && git push`}</pre>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">pnpm new-post my-article-name
+			</pre>
 
 			<h3>新增知识库笔记</h3>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`# 在对应分类目录下创建 .md 文件
-vim src/content/kb/密码学/rsa-padding-attack.md
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">vim src/content/kb/密码学/rsa-padding-attack.md
 
 # frontmatter 格式：
-# ---
 # title: RSA 填充攻击
 # date: 2026-07-26
 # tags: [RSA, 密码学]
 # summary: PKCS#1 v1.5 填充的 Bleichenbacher 攻击原理
-# ---`}</pre>
+			</pre>
 
 			<h3>新增文档页</h3>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`# 1. 在 src/pages/docs/ 下创建 {pagename}.astro
-# 2. 参照 architecture.astro 的结构编写
-# 3. 在 docs/index.astro 的页面列表中添加入口`}</pre>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">1. 在 src/pages/docs/ 下创建新 .astro 文件
+2. 参照 architecture.astro 的结构编写
+3. 在 docs/index.astro 的页面列表中添加入口
+			</pre>
 
 			<h3>新增知识库分类</h3>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`# 在 src/content/kb/ 下创建新目录即可
-mkdir src/content/kb/新分类名
-# 放入 .md 文件后，路由自动生效`}</pre>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">mkdir src/content/kb/新分类名
+# 放入 .md 文件后，路由自动生效
+			</pre>
 
 		</div>
 	</div>
