@@ -198,6 +198,7 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 
 			<p>开发流程：</p>
 			<ol>
+				<li>阅读设计规范 → 确认风格方向</li>
 				<li>阅读本文档 → 确认目录边界和命名规则</li>
 				<li>阅读架构文档 → 确认数据模型、路由、配置项</li>
 				<li>写代码（遵循第 3 节函数设计规则）</li>
@@ -205,6 +206,23 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 				<li>系统测试 Skill 做端到端验证</li>
 				<li>软件测试 Skill 做交互测试</li>
 			</ol>
+
+		</div>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="screenshot">9. 截图参考方法论</h2>
+			<p>当参考某张截图或设计稿实现功能时，按以下原则操作：</p>
+			<ol>
+				<li><strong>学习布局和结构</strong>——截图教你东西怎么摆放，不是教你用什么颜色</li>
+				<li><strong>提取设计思路和精髓</strong>——它为什么这样排版？信息层级怎么组织的？</li>
+				<li><strong>落到项目的设计 Token 上</strong>——颜色用 <code>var(--primary)</code> 而不是截图里的色值；字号用 <code>text-sm</code> 而不是 px；圆角用 <code>var(--radius-large)</code></li>
+				<li><strong>现有 token 不够用才补充</strong>——新增 token 必须跟现有体系保持统一（同 oklch 色空间、同明度偏移量、同命名规则）</li>
+				<li><strong>禁止一比一照抄</strong>——你是棋密，不是截图里的那个产品</li>
+			</ol>
+
+			<p>AI prompt 模板（需要参考截图时这样写）：</p>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`这张图片，参考它的布局结构、信息层级和背后的设计思路，但具体的颜色、字体、间距、圆角优先用我项目里面定义好的设计 Token。如果现有 Token 满足不了这张图的效果，可以适当补充，非必要不要加。新增的也要跟现有的风格保持统一。`}</pre>
 
 		</div>
 	</div>

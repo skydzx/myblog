@@ -1,0 +1,207 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+---
+<MainGridLayout title="设计规范" description="风格定义、色彩系统、设计Token、组件库对齐——项目视觉真源文档">
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-9 py-6 relative w-full prose dark:prose-invert prose-base !max-w-none custom-md leading-relaxed">
+
+			<a href="/docs/" class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">← 返回文档</a>
+
+			<h1>设计规范</h1>
+			<p class="text-[var(--text-muted)]">最后更新：2026-07-26。本文件为项目视觉真源文档，所有界面改动必须先对照本文档。</p>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="style-direction">1. 风格方向</h2>
+
+			<h3>视觉风格分析</h3>
+			<table>
+				<thead><tr><th>维度</th><th>方向</th><th>依据</th></tr></thead>
+				<tbody>
+					<tr><td>整体调性</td><td>暗黑终端 · 极简 · 内容优先</td><td>棋密 = 棋盘密码 + 信息安全，天然适合暗色底 + 低饱和科技感</td></tr>
+					<tr><td>视觉参考</td><td>终端界面 / VS Code / Kali Linux</td><td>目标受众是安全从业者和学习者，终端美学是最自然的共情点</td></tr>
+					<tr><td>信息层级</td><td>标题 > 正文 > 元信息，三级递进</td><td>博客以阅读为核心，装饰性元素最小化</td></tr>
+					<tr><td>色彩策略</td><td>单色相 + 明度/饱和度变化</td><td>全局色相由一个 <code>--hue</code> 变量控制，改一处全局生效</td></tr>
+					<tr><td>动效策略</td><td>克制，仅页面切换和悬浮态</td><td>Swup 页面过渡 + hover 微交互，不加多余动画</td></tr>
+				</tbody>
+			</table>
+
+			<h3>设计原则（写进每个 AI prompt 的第一行）</h3>
+			<ol>
+				<li><strong>内容是第一优先级</strong>——页面存在的意义是让人阅读，装饰让位于可读性</li>
+				<li><strong>暗色默认，亮色兼容</strong>——所有颜色定义双模式（light / dark），不做单模式组件</li>
+				<li><strong>token 先行，禁止硬编码</strong>——颜色、字号、间距、圆角必须来自设计 Token 表，页面里不准出现具体数值</li>
+				<li><strong>复用优先，两例即抽</strong>——同一视觉模式出现 ≥2 次，提取为组件或 token</li>
+				<li><strong>锁定单一组件体系</strong>——只用 Tailwind CSS + Fuwari 内置 Stylus 变量，不引入第三方 UI 库</li>
+			</ol>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="color-system">2. 色彩系统</h2>
+
+			<h3>主色（全局开关）</h3>
+			<p>整个站点的色彩由一个 CSS 变量控制：</p>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`--hue: 160;  /* 暗绿/青色，终端风格。修改此值即可全局换色 */`}</pre>
+			<p>色彩空间统一用 <code>oklch(L C H)</code>，比 HSL 更均匀，暗色模式下不会出现色偏。</p>
+
+			<h3>色阶推导（以 hue=160 为例）</h3>
+			<table>
+				<thead><tr><th>Token</th><th>用途</th><th>亮色模式</th><th>暗色模式</th></tr></thead>
+				<tbody>
+					<tr><td><code>--primary</code></td><td>主题色：链接、选中态、高亮</td><td><code>oklch(0.70 0.14 160)</code></td><td><code>oklch(0.75 0.14 160)</code></td></tr>
+					<tr><td><code>--page-bg</code></td><td>页面背景</td><td><code>oklch(0.95 0.01 160)</code></td><td><code>oklch(0.16 0.014 160)</code></td></tr>
+					<tr><td><code>--card-bg</code></td><td>卡片 / 面板背景</td><td><code>white</code></td><td><code>oklch(0.23 0.015 160)</code></td></tr>
+					<tr><td><code>--btn-content</code></td><td>按钮文字颜色</td><td><code>oklch(0.55 0.12 160)</code></td><td><code>oklch(0.75 0.1 160)</code></td></tr>
+					<tr><td><code>--btn-regular-bg</code></td><td>常规按钮背景</td><td><code>oklch(0.95 0.025 160)</code></td><td><code>oklch(0.33 0.035 160)</code></td></tr>
+					<tr><td><code>--btn-regular-bg-hover</code></td><td>按钮悬浮态</td><td><code>oklch(0.90 0.05 160)</code></td><td><code>oklch(0.38 0.04 160)</code></td></tr>
+					<tr><td><code>--btn-regular-bg-active</code></td><td>按钮按下态</td><td><code>oklch(0.85 0.08 160)</code></td><td><code>oklch(0.43 0.045 160)</code></td></tr>
+					<tr><td><code>--selection-bg</code></td><td>文本选中背景</td><td><code>oklch(0.90 0.05 160)</code></td><td><code>oklch(0.40 0.08 160)</code></td></tr>
+					<tr><td><code>--link-hover</code></td><td>链接悬浮背景</td><td><code>oklch(0.95 0.025 160)</code></td><td><code>oklch(0.40 0.08 160)</code></td></tr>
+					<tr><td><code>--link-active</code></td><td>链接激活态</td><td><code>oklch(0.90 0.05 160)</code></td><td><code>oklch(0.35 0.07 160)</code></td></tr>
+					<tr><td><code>--codeblock-bg</code></td><td>代码块背景</td><td><code>oklch(0.17 0.015 160)</code></td><td><code>oklch(0.17 0.015 160)</code></td></tr>
+					<tr><td><code>--toc-item-active</code></td><td>目录当前项</td><td><code>oklch(0.70 0.13 160)</code></td><td><code>oklch(0.35 0.07 160)</code></td></tr>
+				</tbody>
+			</table>
+
+			<h3>交互状态色阶（每个可交互元素的三态）</h3>
+			<table>
+				<thead><tr><th>状态</th><th>规则</th><th>示例（按钮 background）</th></tr></thead>
+				<tbody>
+					<tr><td>默认 (default)</td><td>中等明度，低饱和度</td><td><code>oklch(0.33 0.035 160)</code></td></tr>
+					<tr><td>悬浮 (hover)</td><td>明度 +0.05，饱和度微微提高</td><td><code>oklch(0.38 0.04 160)</code></td></tr>
+					<tr><td>激活 / 选中 (active/selected)</td><td>明度 +0.10，饱和度再提高</td><td><code>oklch(0.43 0.045 160)</code></td></tr>
+				</tbody>
+			</table>
+			<p>所有可交互元素（按钮、链接、标签、目录项、导航项）必须定义 default → hover → active 三态。用相同的 L/C 偏移量保持节奏一致。</p>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="tokens">3. 设计 Token 表</h2>
+
+			<h3>字体</h3>
+			<table>
+				<thead><tr><th>Token</th><th>值</th><th>用途</th></tr></thead>
+				<tbody>
+					<tr><td>正文</td><td>系统默认 sans-serif（Tailwind <code>prose</code>）</td><td>文章正文、段落</td></tr>
+					<tr><td>代码</td><td><code>JetBrains Mono Variable</code></td><td>代码块、行内代码</td></tr>
+					<tr><td>UI 文字</td><td>继承正文</td><td>导航、标签、按钮</td></tr>
+				</tbody>
+			</table>
+
+			<h3>字号（Tailwind prose 体系 + 关键覆写）</h3>
+			<table>
+				<thead><tr><th>层级</th><th>类名</th><th>用途</th></tr></thead>
+				<tbody>
+					<tr><td>页面标题</td><td><code>text-2xl</code> (1.5rem)</td><td>KB 首页、Docs 页的 h1</td></tr>
+					<tr><td>文章标题</td><td><code>text-3xl</code> / <code>text-[2.25rem]</code></td><td>博客文章 h1（带左侧色条装饰）</td></tr>
+					<tr><td>区块标题</td><td><code>text-xl</code> (1.25rem)</td><td>文档二级标题</td></tr>
+					<tr><td>正文</td><td><code>prose prose-base</code> (~1rem)</td><td>文章段落、列表</td></tr>
+					<tr><td>辅助文字</td><td><code>text-sm</code> (0.875rem)</td><td>日期、标签、描述、meta 信息</td></tr>
+					<tr><td>代码</td><td><code>text-sm</code> (0.875rem)</td><td>代码块内文字</td></tr>
+					<tr><td>微小文字</td><td><code>text-xs</code> (0.75rem)</td><td>标签 badge、角标</td></tr>
+				</tbody>
+			</table>
+
+			<h3>间距</h3>
+			<table>
+				<thead><tr><th>Token</th><th>用法</th></tr></thead>
+				<tbody>
+					<tr><td>卡片内边距</td><td><code>px-9 py-6</code> (36px / 24px)</td></tr>
+					<tr><td>元素间距（紧凑）</td><td><code>gap-2</code> / <code>space-y-2</code></td></tr>
+					<tr><td>元素间距（舒适）</td><td><code>gap-3</code> / <code>space-y-3</code></td></tr>
+					<tr><td>区块间距</td><td><code>mb-6</code> / <code>mb-8</code></td></tr>
+					<tr><td>页面外边距</td><td><code>max-w-[var(--page-width)] mx-auto</code> (75rem)</td></tr>
+				</tbody>
+			</table>
+
+			<h3>圆角</h3>
+			<table>
+				<thead><tr><th>Token</th><th>值</th><th>用途</th></tr></thead>
+				<tbody>
+					<tr><td><code>--radius-large</code></td><td><code>1rem</code></td><td>主卡片、内容面板</td></tr>
+					<tr><td>按钮 / 标签 / badge</td><td><code>rounded-full</code></td><td>标签 pill、计数组件</td></tr>
+				</tbody>
+			</table>
+
+			<h3>阴影</h3>
+			<p>本项目不使用阴影。卡片层次靠背景色差（<code>--card-bg</code> vs <code>--card-bg-secondary</code>）和边框（<code>border-[var(--border-color)]</code>）区分。保持扁平、干净的终端风格。</p>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="ui-library">4. UI 组件库对齐</h2>
+
+			<h3>选型</h3>
+			<table>
+				<thead><tr><th>项</th><th>选择</th><th>版本</th><th>理由</th></tr></thead>
+				<tbody>
+					<tr><td>CSS 框架</td><td>Tailwind CSS</td><td>3.x</td><td>原子化，Fuwari 主题原生依赖</td></tr>
+					<tr><td>排版插件</td><td>@tailwindcss/typography</td><td>0.5.x</td><td><code>prose</code> 类提供文章级排版</td></tr>
+					<tr><td>代码高亮</td><td>astro-expressive-code</td><td>0.41.x</td><td>代码块渲染，样式通过 <code>styleOverrides</code> 全局统管</td></tr>
+					<tr><td>图标</td><td>astro-icon (Iconify)</td><td>1.x</td><td>按需加载 SVG，不引入图标字体</td></tr>
+					<tr><td>交互组件</td><td>Svelte 5</td><td>5.x</td><td>搜索框、明暗切换等需要状态的组件</td></tr>
+					<tr><td>页面过渡</td><td>@swup/astro</td><td>1.x</td><td>SPA 式页面切换动画</td></tr>
+				</tbody>
+			</table>
+
+			<h3>约束</h3>
+			<ul>
+				<li><strong>只锁定上述组件体系，不引入任何第三方 UI 库</strong>（如 Ant Design、Element Plus 等）</li>
+				<li>Tailwind 原子类 + Fuwari 内置 Stylus 变量 = 全局风格开关</li>
+				<li>改主色只改 <code>--hue</code> 一处，全局 CSS 变量自动级联生效</li>
+				<li>禁止在页面或组件中用 <code>style=&#123;"color: #xxx"&#125;</code> 硬写数值</li>
+			</ul>
+
+			<h3>Token 与组件库主题打通</h3>
+			<p>Fuwari 主题已做好 CSS 变量与 Tailwind 的对齐：</p>
+			<ul>
+				<li>Stylus <code>define()</code> 宏生成 <code>:root</code> 和 <code>:root.dark</code> 两套变量</li>
+				<li>Tailwind 的 <code>dark:</code> 前缀由浏览器的 <code>class="dark"</code> 控制</li>
+				<li>所有组件（Navbar、SideBar、PostCard、Footer）通过 <code>var(--xxx)</code> 取值，不自己定义颜色</li>
+				<li>新增组件必须沿用这套变量体系，不得引入新的颜色定义</li>
+			</ul>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="workflow">5. 设计工作流</h2>
+
+			<h3>新功能开发前的设计检查</h3>
+			<ol>
+				<li><strong>确定风格方向</strong>：这个功能应该呈现什么感觉？（暗黑终端 / 卡片信息 / 列表浏览）</li>
+				<li><strong>检查现有 token</strong>：当前颜色/字号/间距/圆角能否满足？优先复用</li>
+				<li><strong>如需新增 token</strong>：在 <code>variables.styl</code> 中添加，命名遵循 <code>--&#123;用途&#125;-&#123;状态&#125;</code> 格式，必须定义亮暗双模式</li>
+				<li><strong>写组件</strong>：只使用 Tailwind 原子类 + CSS 变量，不写内联样式</li>
+				<li><strong>对照本文档自查</strong>：有没有硬编码数值？有没有绕开组件库主题？</li>
+			</ol>
+
+			<h3>截图参考方法论</h3>
+			<p>当需要参考某张截图 / 设计稿时，按以下原则操作：</p>
+			<ol>
+				<li><strong>学习布局和结构</strong>——截图教你"东西怎么摆放"，不是教你"用什么颜色"</li>
+				<li><strong>提取设计思路和精髓</strong>——它为什么这样排版？信息层级怎么组织的？交互节奏是什么样的？</li>
+				<li><strong>落到你的 token 上</strong>——颜色用 <code>var(--primary)</code> 而不是截图里的色值；字号用 <code>text-sm</code> 而不是截图里的 px；圆角用 <code>var(--radius-large)</code> 而不是截图里的数值</li>
+				<li><strong>现有 token 不够用才补充</strong>——新增的 token 必须跟现有体系保持统一（同样的色空间、同样的明度偏移量、同样的命名规则）</li>
+				<li><strong>禁止一比一照抄</strong>——你是棋密，不是截图里的那个产品</li>
+			</ol>
+
+			<p>AI prompt 模板（需要参考截图时这样写）：</p>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`这张图片，参考它的布局结构、信息层级和背后的设计思路，
+但具体颜色、字体、间距、圆角优先用项目设计 Token 表里的值。
+如果现有 Token 满足不了，可以适当补充，但新增的必须跟现有风格保持统一。
+非必要不要加新的东西。`}</pre>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="checklist">6. 设计自查清单</h2>
+			<p>每次 UI 改动提交前：</p>
+			<ol>
+				<li>颜色是否来自 <code>var(--xxx)</code> 或 Tailwind 预设类？</li>
+				<li>有没有在页面里写 <code>style="color: #..."</code>？</li>
+				<li>新组件是否定义了 default / hover / active 三态？</li>
+				<li>亮色模式和暗色模式是否都正常？</li>
+				<li>有没有引入新的第三方 UI 依赖？</li>
+				<li>新增的 CSS 变量是否在 <code>variables.styl</code> 中定义了亮暗双值？</li>
+			</ol>
+
+		</div>
+	</div>
+</MainGridLayout>
