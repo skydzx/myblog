@@ -46,24 +46,24 @@ curl -s http://127.0.0.1:8000/api/knowledge/stats | head -c 200`;
 ---
 <MainGridLayout title="Software Testing Skill - 文档" description="Playwright 自动化测试技能文档">
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-		<div class="card-base z-10 px-9 py-6 relative w-full prose dark:prose-invert prose-base !max-w-none custom-md">
+		<div class="card-base z-10 px-9 py-6 relative w-full prose dark:prose-invert prose-base !max-w-none custom-md leading-relaxed">
 
 			<a href="/docs/" class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">← 返回文档</a>
 			<h1>软件测试技能 (Software Testing Skill)</h1>
 			<p>本技能用于系统地测试和调试前端应用，包括 Playwright 自动化测试、问题定位和修复。</p>
 
 			<h2 id="env-check">1. 环境检查</h2>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{envCheckBlock}</pre>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{envCheckBlock}</pre>
 
 			<h2 id="startup">2. 启动测试环境</h2>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{`# 启动后端 (在 backend 目录)
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`# 启动后端 (在 backend 目录)
 .venv/Scripts/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 # 启动前端 (在 frontend 目录)
 npm run dev`}</pre>
 
 			<h2 id="playwright">3. Playwright 测试步骤</h2>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{playwrightBlock}</pre>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{playwrightBlock}</pre>
 
 			<h2 id="troubleshoot">4. 常见错误排查</h2>
 			<table class="w-full text-sm border-collapse mb-4">
@@ -98,7 +98,7 @@ npm run dev`}</pre>
 				</tbody>
 			</table>
 
-			<h3>排查步骤</h3>
+			<h3 class="mt-6 mb-3">排查步骤</h3>
 			<ol class="list-decimal pl-5 space-y-2 mb-4">
 				<li><strong>检查浏览器控制台</strong><br/>
 					<code class="text-xs">await playwright_console_logs({'{'}type{':'} {''}error{'}'})</code><br/>
@@ -117,18 +117,18 @@ npm run dev`}</pre>
 			</ol>
 
 			<h2 id="fixes">5. 常见问题修复</h2>
-			<h3>CORS 问题</h3>
+			<h3 class="mt-6 mb-3">CORS 问题</h3>
 			<p>修改 <code>backend/app/main.py</code>:</p>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{corsFixBlock}</pre>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{corsFixBlock}</pre>
 
-			<h3>组件警告</h3>
+			<h3 class="mt-6 mb-3">组件警告</h3>
 			<ul class="list-disc pl-5 mb-4">
 				<li><code>Spin tip</code> 警告 → 使用嵌套模式</li>
 				<li><code>Select null value</code> → 使用 <code>undefined</code> 替代 <code>null</code></li>
 			</ul>
 
-			<h3>端口冲突</h3>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{`# 查找占用端口的进程
+			<h3 class="mt-6 mb-3">端口冲突</h3>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{`# 查找占用端口的进程
 netstat -ano | findstr :3000
 
 # 终止进程
@@ -147,7 +147,7 @@ taskkill /F /PID <PID>`}</pre>
 			</ul>
 
 			<h2 id="run">7. 测试命令速查</h2>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{fullTestBlock}</pre>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">{fullTestBlock}</pre>
 
 			<h2 id="tips">8. 调试技巧</h2>
 			<ol class="list-decimal pl-5 space-y-1 mb-6">

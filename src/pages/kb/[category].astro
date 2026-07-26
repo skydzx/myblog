@@ -37,7 +37,7 @@ const pageDesc = category + " 分类下的所有文章";
 			<p class="text-sm text-[var(--text-muted)] mb-6">
 				共 {articles.length} 篇文章
 			</p>
-			<div class="space-y-2">
+			<div class="space-y-3">
 				{articles.map((a) => {
 					const slug = a.id.replace(category + "/", "");
 					const href = "/kb/" + category + "/" + slug + "/";

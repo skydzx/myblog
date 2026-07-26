@@ -62,15 +62,19 @@ const skills = [
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
 		<div class="card-base z-10 px-9 py-6 relative w-full">
 
-			<h1 class="text-2xl font-bold mb-6">项目文档</h1>
+			<h1 class="text-2xl font-bold mb-2">项目文档</h1>
+			<p class="text-[var(--text-muted)] mb-8 leading-relaxed">
+				本站基于 Astro + Fuwari 构建，部署于 Cloudflare Pages。以下为项目架构、技术栈及开发文档索引。
+			</p>
 
 			<!-- Architecture -->
-			<h2 class="text-xl font-semibold mt-8 mb-4">项目架构</h2>
-			<div class="mermaid">{archDiagram}</div>
+			<h2 class="text-xl font-semibold mt-10 mb-4">项目架构</h2>
+			<p class="text-sm text-[var(--text-muted)] mb-3">博客内容经 Markdown 解析后，分别由 Expressive Code、KaTeX、Mermaid 渲染，最终通过 Pagefind 建立全文索引。</p>
+			<div class="mermaid mb-8">{archDiagram}</div>
 
 			<!-- Tech Stack -->
 			<h2 class="text-xl font-semibold mt-10 mb-4">技术栈</h2>
-			<div class="mermaid">{mindmapDiagram}</div>
+			<div class="mermaid mb-8">{mindmapDiagram}</div>
 
 			<!-- Skills -->
 			<h2 class="text-xl font-semibold mt-10 mb-4">Claude Code Skills</h2>
