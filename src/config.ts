@@ -38,12 +38,12 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
-			name: "📚",
+			name: "知识库",
 			url: "/kb/",
 			external: false,
 		},
 		{
-			name: "📖",
+			name: "文档",
 			url: "/docs/",
 			external: false,
 		},
