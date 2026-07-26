@@ -1,0 +1,211 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+---
+<MainGridLayout title="开发规范" description="命名规则、函数设计、目录边界、代码质量——项目开发真源文档">
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-9 py-6 relative w-full prose dark:prose-invert prose-base !max-w-none custom-md leading-relaxed">
+
+			<a href="/docs/" class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">← 返回文档</a>
+
+			<h1>开发规范</h1>
+			<p class="text-[var(--text-muted)]">最后更新：2026-07-26。本文件为项目开发真源文档，所有代码提交必须符合以下规范。</p>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="principles">1. 核心原则</h2>
+			<p>代码必须优先满足<strong>可维护性</strong>，而不只是"能跑"：</p>
+			<ul>
+				<li>命名能表达业务意图，不用 <code>data</code> / <code>info</code> / <code>temp</code> / <code>handle</code> / <code>process</code> 这类含糊名称</li>
+				<li>每个函数只做一件事，职责单一</li>
+				<li>类型、注释、错误处理能帮助后续维护</li>
+				<li>不随意引入新依赖，新增依赖必须在提交说明里写清用途</li>
+				<li>代码天然可测试</li>
+			</ul>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="naming">2. 命名规则</h2>
+
+			<h3>TypeScript / Astro 前端代码（<code>src/components/</code> <code>src/layouts/</code> <code>src/utils/</code> <code>src/plugins/</code>）</h3>
+			<table>
+				<thead><tr><th>对象</th><th>规则</th><th>示例</th></tr></thead>
+				<tbody>
+					<tr><td>函数 / 变量</td><td>camelCase</td><td><code>getSortedPosts()</code> <code>pageTitle</code></td></tr>
+					<tr><td>组件 / 类 / 接口</td><td>PascalCase</td><td><code>MainGridLayout</code> <code>PostMetadata</code></td></tr>
+					<tr><td>常量</td><td>UPPER_SNAKE_CASE</td><td><code>PAGE_SIZE</code> <code>DEFAULT_THEME</code></td></tr>
+					<tr><td>文件名（组件）</td><td>PascalCase，与组件同名</td><td><code>PostCard.astro</code> <code>Search.svelte</code></td></tr>
+					<tr><td>文件名（工具）</td><td>kebab-case，表达功能</td><td><code>content-utils.ts</code> <code>date-utils.ts</code></td></tr>
+					<tr><td>文件名（插件）</td><td>kebab-case，<code>remark-</code> 或 <code>rehype-</code> 前缀</td><td><code>remark-mermaid.mjs</code> <code>rehype-component-admonition.mjs</code></td></tr>
+					<tr><td>集合名</td><td>camelCase，复数</td><td><code>const postsCollection</code></td></tr>
+				</tbody>
+			</table>
+
+			<h3>Markdown 内容文件（<code>src/content/</code>）</h3>
+			<table>
+				<thead><tr><th>对象</th><th>规则</th><th>示例</th></tr></thead>
+				<tbody>
+					<tr><td>博客文章文件名</td><td>kebab-case，英文主题名</td><td><code>hello-world.md</code> <code>aes-encryption-guide.md</code></td></tr>
+					<tr><td>知识库文件名</td><td>kebab-case，英文主题名，不含日期</td><td><code>nmap-cheatsheet.md</code> <code>rsa-padding-attack.md</code></td></tr>
+					<tr><td>分类目录名</td><td>中文优先，清晰表达领域</td><td><code>密码学/</code> <code>Linux命令/</code> <code>AI/</code></td></tr>
+					<tr><td>frontmatter 字段</td><td>camelCase</td><td><code>published</code> <code>prevTitle</code></td></tr>
+				</tbody>
+			</table>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="functions">3. 函数设计</h2>
+
+			<h3>长度限制</h3>
+			<table>
+				<thead><tr><th>语言</th><th>单函数最大有效行数</th><th>超过则</th></tr></thead>
+				<tbody>
+					<tr><td>TypeScript</td><td>30 行</td><td>拆分为多个小函数</td></tr>
+					<tr><td>Astro 模板</td><td>50 行（template 部分）</td><td>提取为子组件</td></tr>
+					<tr><td>Svelte</td><td>30 行（script 部分）</td><td>提取为独立 composable</td></tr>
+				</tbody>
+			</table>
+
+			<h3>职责单一</h3>
+			<p><strong>禁止"上帝函数"</strong>——一个函数里同时完成读取、校验、计算、持久化、响应组装等多个职责。</p>
+			<ul>
+				<li>协调函数可以编排流程，但具体读取、校验、转换、保存逻辑必须拆到独立函数</li>
+				<li>Astro 页面组件的 frontmatter（<code>---</code> 块）负责数据获取和转换，template 块只负责渲染</li>
+				<li><code>getStaticPaths</code> 只返回路径数组，不在其中做复杂业务逻辑</li>
+			</ul>
+
+			<h3>函数必须有明确动词</h3>
+			<table>
+				<thead><tr><th>前缀</th><th>含义</th><th>示例</th></tr></thead>
+				<tbody>
+					<tr><td><code>get</code></td><td>获取 / 查询</td><td><code>getSortedPosts()</code> <code>getCollection()</code></td></tr>
+					<tr><td><code>build</code> / <code>create</code></td><td>构造 / 创建</td><td><code>buildKnowledgeBase()</code></td></tr>
+					<tr><td><code>parse</code></td><td>解析</td><td><code>parseDirectiveNode()</code></td></tr>
+					<tr><td><code>render</code></td><td>渲染</td><td><code>render(entry)</code></td></tr>
+					<tr><td><code>fetch</code></td><td>网络获取</td><td><code>fetchArticleSource()</code></td></tr>
+					<tr><td><code>validate</code></td><td>校验</td><td><code>validateFrontmatter()</code></td></tr>
+					<tr><td><code>format</code></td><td>格式化</td><td><code>formatDateToYYYYMMDD()</code></td></tr>
+					<tr><td><code>sort</code></td><td>排序</td><td><code>sortByDate()</code></td></tr>
+				</tbody>
+			</table>
+
+			<p><strong>禁止使用的模糊前缀：</strong> <code>enrich</code> / <code>improve</code> / <code>enhance</code> / <code>process</code> / <code>handle</code> / <code>do</code>。命名必须直接说明具体业务含义。</p>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="boundaries">4. 目录边界</h2>
+
+			<table>
+				<thead><tr><th>目录</th><th>可以做什么</th><th>不能做什么</th></tr></thead>
+				<tbody>
+					<tr><td><code>src/pages/</code></td><td>定义路由、获取数据、编排组件</td><td>不写业务逻辑、不直接操作 DOM、不做复杂计算</td></tr>
+					<tr><td><code>src/components/</code></td><td>渲染 UI、接收 props、触发事件</td><td>不直接读取文件系统、不调用 <code>getCollection</code></td></tr>
+					<tr><td><code>src/layouts/</code></td><td>定义页面骨架（HTML head、导航、侧边栏、页脚）</td><td>不写页面级业务逻辑</td></tr>
+					<tr><td><code>src/plugins/</code></td><td>处理 Markdown AST / HTML AST</td><td>不渲染 UI、不访问浏览器 API</td></tr>
+					<tr><td><code>src/utils/</code></td><td>纯函数工具（无副作用）</td><td>不访问 DOM、不调用 <code>Astro</code> 全局对象</td></tr>
+					<tr><td><code>src/content/</code></td><td>存放 Markdown 内容文件</td><td>不写可执行代码</td></tr>
+					<tr><td><code>src/constants/</code></td><td>定义运行时常量</td><td>不依赖任何模块</td></tr>
+					<tr><td><code>src/types/</code></td><td>定义 TypeScript 类型</td><td>不包含运行时代码</td></tr>
+					<tr><td><code>src/styles/</code></td><td>全局样式 / CSS 变量</td><td>不写组件级样式（用 Tailwind 原子类）</td></tr>
+					<tr><td><code>src/assets/</code></td><td>静态资源（图片、字体）</td><td>不存放会被 <code>import</code> 的 JS/TS 文件</td></tr>
+				</tbody>
+			</table>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="astro">5. Astro 文件规范</h2>
+
+			<h3>frontmatter（<code>---</code> 块）</h3>
+			<ul>
+				<li>只负责：import 依赖、获取数据、定义变量、处理逻辑</li>
+				<li>数据获取：<code>getCollection</code> / <code>getEntry</code> / <code>render</code></li>
+				<li>数据处理：过滤、排序、分组、格式化</li>
+				<li>不在此处写 HTML 或 JSX，除非必须用 <code>return (...)</code> 做条件渲染（仅限需要 <code>&lt;Content /&gt;</code> 组件的场景）</li>
+			</ul>
+
+			<h3>template 块</h3>
+			<ul>
+				<li>只负责：渲染 HTML、传递 props、条件显示、循环列表</li>
+				<li>不在模板中做：复杂计算、数据请求、文件读取</li>
+				<li>列表渲染统一用 <code>array.map()</code>，保持缩进一致</li>
+				<li>模板中避免使用 template literal（反引号），用字符串拼接替代</li>
+			</ul>
+
+			<h3>getStaticPaths</h3>
+			<ul>
+				<li>必须返回所有可能的静态路径</li>
+				<li>params 的值必须是 string（不能用数组）</li>
+				<li>不在其中做副作用操作（写文件、发网络请求等）</li>
+			</ul>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="content">6. 内容规范</h2>
+
+			<h3>博客文章</h3>
+			<ul>
+				<li>frontmatter 必填 <code>title</code> 和 <code>published</code></li>
+				<li>草稿设置 <code>draft: true</code>，构建时自动排除</li>
+				<li><code>description</code> 写 1-2 句摘要，用于 SEO 和列表卡片</li>
+				<li>标签不超过 5 个，用有区分度的词</li>
+				<li>标题用中文，文件名用英文 kebab-case</li>
+			</ul>
+
+			<h3>知识库</h3>
+			<ul>
+				<li>一类知识一个文件，不要多主题混写</li>
+				<li><code>summary</code> 写一句话核心要点</li>
+				<li>善用表格和列表，方便快速查阅</li>
+				<li>代码示例用带语言标记的代码块（Expressive Code 自动高亮）</li>
+			</ul>
+
+			<h3>文档页</h3>
+			<ul>
+				<li>每个文档页是独立的 <code>.astro</code> 文件</li>
+				<li>用 <code>&lt;h2&gt;</code> 做一级分节，<code>&lt;h3&gt;</code> 做二级</li>
+				<li>代码示例用 <code>&lt;pre&gt;</code> + 前端 JS 字符串变量</li>
+				<li>表格统一用 <code>&lt;table&gt;</code> 搭配 prose 排版类</li>
+			</ul>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="quality">7. 质量检查</h2>
+
+			<p>每次提交前自查：</p>
+			<ol>
+				<li>代码在正确的目录（参照第 4 节边界表）</li>
+				<li>零 <code>any</code> 类型（TypeScript）</li>
+				<li>新增依赖在 commit message 中说明了用途</li>
+				<li>函数不超过长度上限</li>
+				<li>没有上帝函数</li>
+				<li>新增页面 / 分类 / 插件已在架构文档中更新</li>
+				<li><code>pnpm astro check</code> 通过</li>
+				<li><code>pnpm build</code> 通过（至少 <code>pnpm dev</code> 无报错）</li>
+			</ol>
+
+			<hr class="my-8 border-[var(--border-color)]" />
+
+			<h2 id="skills">8. 与测试 Skill 的对应关系</h2>
+
+			<p>本项目的两个 Claude Code Skill（<a href="/docs/software-testing/">Software Testing</a> / <a href="/docs/system-testing/">System Testing</a>）在执行时会读取本文档：</p>
+
+			<table>
+				<thead><tr><th>Skill</th><th>触发场景</th><th>应读取的章节</th></tr></thead>
+				<tbody>
+					<tr><td>Software Testing</td><td>功能开发完成后做 Playwright 自动化测试</td><td>第 3 节（函数设计）、第 7 节（质量检查）</td></tr>
+					<tr><td>System Testing</td><td>系统级端到端验证，检查路由和数据流</td><td>第 4 节（目录边界）、第 5 节（Astro 规范）、架构文档路由表</td></tr>
+				</tbody>
+			</table>
+
+			<p>开发流程：</p>
+			<ol>
+				<li>阅读本文档 → 确认目录边界和命名规则</li>
+				<li>阅读架构文档 → 确认数据模型、路由、配置项</li>
+				<li>写代码（遵循第 3 节函数设计规则）</li>
+				<li>自查（第 7 节清单）</li>
+				<li>系统测试 Skill 做端到端验证</li>
+				<li>软件测试 Skill 做交互测试</li>
+			</ol>
+
+		</div>
+	</div>
+</MainGridLayout>
