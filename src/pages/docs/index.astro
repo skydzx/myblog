@@ -1,0 +1,125 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+const archDiagram = `graph TB
+    subgraph Blog["Blog - Astro + Fuwari"]
+        A["📝 Posts 技术文章"]
+        B["📚 KB 知识库"]
+        C["📖 Docs 文档/Skills"]
+        D["👤 About 关于"]
+    end
+
+    subgraph Pipeline["Content Pipeline"]
+        E["🎨 Expressive Code 代码高亮"]
+        F["📐 KaTeX 数学公式"]
+        G["📊 Mermaid 图表"]
+        H["🔍 Pagefind 全文搜索"]
+    end
+
+    subgraph Deploy["Deploy"]
+        I["💻 GitHub 源码"]
+        J["☁️ Cloudflare Pages 托管 + CDN"]
+        K["🔒 geeyx.me 自定义域"]
+    end
+
+    A --> E
+    A --> F
+    A --> G
+    B --> E
+    B --> H
+    C --> E
+    C --> G
+    I --> J
+    J --> K`;
+
+const mindmapDiagram = `mindmap
+  root((棋密))
+    Framework
+      Astro 5.x
+      Svelte 5
+      Tailwind CSS 3
+    Content
+      Markdown + MDX
+      Remark + Rehype
+      Content Collections
+    Rendering
+      Expressive Code
+      KaTeX LaTeX
+      Mermaid Charts
+    Search
+      Pagefind
+    Deploy
+      Cloudflare Pages
+      GitHub CI/CD
+      Custom Domain`;
+
+const skills = [
+	{ name: "Software Testing Skill", slug: "software-testing", desc: "Playwright 自动化测试、环境检查、问题定位与修复流程" },
+	{ name: "System Testing Skill", slug: "system-testing", desc: "AI 知识库系统端到端测试，覆盖 Query、Knowledge、Settings 页面" },
+];
+---
+<MainGridLayout title="文档" description="Project Documentation & Architecture">
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-9 py-6 relative w-full">
+
+			<h1 class="text-2xl font-bold mb-6">📖 项目文档</h1>
+
+			<!-- Architecture -->
+			<h2 class="text-xl font-semibold mt-8 mb-4">🏗️ 项目架构</h2>
+			<div class="mermaid">{archDiagram}</div>
+
+			<!-- Tech Stack -->
+			<h2 class="text-xl font-semibold mt-10 mb-4">🛠️ 技术栈</h2>
+			<div class="mermaid">{mindmapDiagram}</div>
+
+			<!-- Skills -->
+			<h2 class="text-xl font-semibold mt-10 mb-4">🧩 Claude Code Skills</h2>
+			<p class="text-sm text-[var(--text-muted)] mb-4">
+				以下 Skills 定义于 AI 知识库项目中，供 Claude Code 代理调用，现存档于本站。
+			</p>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+				{skills.map((s) => (
+					<a
+						href={"/docs/" + s.slug + "/"}
+						class="card-base px-4 py-4 block transition hover:border-[var(--primary)] hover:shadow-sm no-underline"
+					>
+						<div class="font-semibold text-[var(--text)] mb-1">{s.name}</div>
+						<div class="text-sm text-[var(--text-muted)]">{s.desc}</div>
+					</a>
+				))}
+			</div>
+
+			<!-- Directory Structure -->
+			<h2 class="text-xl font-semibold mt-10 mb-4">📁 项目结构</h2>
+			<div class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-xs leading-relaxed overflow-x-auto text-[var(--text-muted)]">
+src/
+├── <span class="text-[var(--primary)]">content/</span>
+│   ├── posts/          ← 博客文章
+│   ├── kb/             ← 知识库
+│   └── spec/           ← 固定页面
+├── <span class="text-[var(--primary)]">pages/</span>
+│   ├── kb/             ← 知识库路由
+│   ├── docs/           ← 文档 / 技能页
+│   ├── [...page].astro ← 首页分页
+│   └── about.astro
+├── <span class="text-[var(--primary)]">components/</span>  ← 组件
+├── <span class="text-[var(--primary)]">layouts/</span>     ← 布局
+├── <span class="text-[var(--primary)]">plugins/</span>     ← Remark / Rehype 插件
+├── <span class="text-[var(--primary)]">constants/</span>   ← 常量
+└── config.ts          ← 站点配置
+			</div>
+
+		</div>
+	</div>
+</MainGridLayout>
+
+<script type="module">
+	import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+	mermaid.initialize({
+		startOnLoad: true,
+		theme: "dark",
+		themeVariables: {
+			fontFamily: "'JetBrains Mono Variable', ui-monospace, monospace",
+		},
+	});
+</script>

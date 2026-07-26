@@ -1,0 +1,128 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+const usageBlock = `{
+  "name": "test-system",
+  "description": "测试前后端系统功能",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "page": {
+        "type": "string",
+        "enum": ["knowledge", "query", "settings"],
+        "description": "要测试的页面"
+      },
+      "action": {
+        "type": "string",
+        "enum": ["navigate", "test-query", "test-upload", "check-console"],
+        "description": "测试操作"
+      }
+    }
+  }
+}`;
+
+const queryTestBlock = `// 导航到查询页面
+await playwright_navigate("http://localhost:3000/query")
+
+// 输入问题
+await playwright_fill("textarea", "网络安全法")
+
+// 点击查询
+await playwright_click("button:has-text('查询')")
+`;
+
+const kbTestBlock = `// 导航到知识库管理页面
+await playwright_navigate("http://localhost:3000/knowledge")
+
+// 等待数据加载
+await playwright_evaluate("() => document.querySelector('.ant-table')")
+`;
+
+const consoleBlock = `// 获取控制台错误
+await playwright_console_logs({ type: "error", limit: 20 })
+`;
+
+const fullFlow = `# 1. 检查端口占用
+netstat -ano | findstr :8000
+netstat -ano | findstr :3000
+
+# 2. 终止冲突进程
+taskkill /PID <PID> /F
+
+# 3. 启动后端
+cd backend
+.venv/Scripts/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+# 4. 启动前端
+cd frontend
+npm run dev
+
+# 5. 使用 Playwright 测试
+# - 导航到 http://localhost:3000
+# - 测试各页面功能
+# - 检查控制台错误
+`;
+---
+<MainGridLayout title="System Testing Skill - 文档" description="AI 知识库系统端到端测试技能">
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-9 py-6 relative w-full prose dark:prose-invert prose-base !max-w-none custom-md">
+
+			<a href="/docs/" class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">← 返回文档</a>
+			<h1>🖥️ 系统测试技能 (System Testing Skill)</h1>
+			<p>这是一个用于测试 AI 知识库系统的自动化技能，使用 Playwright 进行浏览器自动化测试。</p>
+
+			<h2 id="usage">使用方法</h2>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{usageBlock}</pre>
+
+			<h2 id="scenarios">测试场景</h2>
+
+			<h3>测试查询页面</h3>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{queryTestBlock}</pre>
+
+			<h3>测试知识库页面</h3>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{kbTestBlock}</pre>
+
+			<h3>检查控制台错误</h3>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{consoleBlock}</pre>
+
+			<h2 id="workflow">完整测试流程</h2>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{fullFlow}</pre>
+
+			<h2 id="faq">常见问题</h2>
+			<div class="space-y-4 mb-6">
+				<div class="card-base bg-[var(--card-bg-secondary)] p-4">
+					<p class="font-semibold mb-1">Q: 后端返回 502 Bad Gateway</p>
+					<p class="text-sm text-[var(--text-muted)]">A: Ollama 服务未启动。检查: <code>curl http://192.168.2.241:11434/api/tags</code></p>
+				</div>
+				<div class="card-base bg-[var(--card-bg-secondary)] p-4">
+					<p class="font-semibold mb-1">Q: CORS 错误</p>
+					<p class="text-sm text-[var(--text-muted)]">A: 多个后端进程占用端口。终止旧进程: <code>powershell -Command "Get-Process python | Stop-Process -Force"</code></p>
+				</div>
+				<div class="card-base bg-[var(--card-bg-secondary)] p-4">
+					<p class="font-semibold mb-1">Q: 页面加载但无数据</p>
+					<p class="text-sm text-[var(--text-muted)]">A: 检查后端日志和 API 响应: <code>curl http://127.0.0.1:8000/api/knowledge/stats</code></p>
+				</div>
+			</div>
+
+			<h2 id="expected">预期测试结果</h2>
+			<table class="w-full text-sm border-collapse mb-6">
+				<thead>
+					<tr class="border-b border-[var(--border-color)]">
+						<th class="text-left py-2 px-3">功能</th>
+						<th class="text-left py-2 px-3">预期结果</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="border-b border-[var(--border-color)]"><td class="py-2 px-3">知识库页面</td><td class="py-2 px-3">显示文档列表、分类统计</td></tr>
+					<tr class="border-b border-[var(--border-color)]"><td class="py-2 px-3">查询页面</td><td class="py-2 px-3">可选择模型、执行查询、显示结果</td></tr>
+					<tr class="border-b border-[var(--border-color)]"><td class="py-2 px-3">设置页面</td><td class="py-2 px-3">查看和修改配置</td></tr>
+					<tr class="border-b border-[var(--border-color)]"><td class="py-2 px-3">API 响应</td><td class="py-2 px-3">200 OK, 返回正确数据</td></tr>
+				</tbody>
+			</table>
+
+			<h2>示例测试命令</h2>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-4 text-[var(--text-muted)]">{`{"page": "query", "action": "test-query", "query": "网络安全法"}`}</pre>
+
+		</div>
+	</div>
+</MainGridLayout>

@@ -1,0 +1,65 @@
+---
+import { getCollection } from "astro:content";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+export async function getStaticPaths() {
+	const entries = await getCollection("kb");
+	const cats = new Set<string>();
+	for (const e of entries) {
+		const cat = e.id.split("/")[0];
+		if (cat) cats.add(cat);
+	}
+	return Array.from(cats).map((cat) => ({ params: { category: cat } }));
+}
+
+const { category } = Astro.params;
+if (!category) return new Response("Not Found", { status: 404 });
+
+const allEntries = await getCollection("kb");
+const articles = allEntries
+	.filter((e) => e.id.startsWith(category + "/"))
+	.sort((a, b) => {
+		const da = a.data.date ?? new Date(0);
+		const db = b.data.date ?? new Date(0);
+		return db.getTime() - da.getTime();
+	});
+
+const pageTitle = category + " - 知识库";
+const pageDesc = category + " 分类下的所有文章";
+---
+<MainGridLayout title={pageTitle} description={pageDesc}>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-9 py-6 relative w-full">
+			<a href="/kb/" class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">
+				← 返回知识库首页
+			</a>
+			<h1 class="text-2xl font-bold mb-2">{"📂 " + category}</h1>
+			<p class="text-sm text-[var(--text-muted)] mb-6">
+				共 {articles.length} 篇文章
+			</p>
+			<div class="space-y-2">
+				{articles.map((a) => {
+					const slug = a.id.replace(category + "/", "");
+					const href = "/kb/" + category + "/" + slug + "/";
+					return (
+						<a href={href} class="card-base px-4 py-3 block transition hover:border-[var(--primary)] hover:shadow-sm no-underline">
+							<div class="flex items-start justify-between gap-4">
+								<div>
+									<div class="font-medium text-[var(--text)]">{a.data.title}</div>
+									{a.data.summary ? (
+										<p class="text-sm text-[var(--text-muted)] mt-1 line-clamp-1">{a.data.summary}</p>
+									) : null}
+								</div>
+								{a.data.date ? (
+									<span class="text-xs text-[var(--text-muted)] whitespace-nowrap shrink-0 mt-0.5">
+										{a.data.date.toISOString().slice(0, 10)}
+									</span>
+								) : null}
+							</div>
+						</a>
+					);
+				})}
+			</div>
+		</div>
+	</div>
+</MainGridLayout>

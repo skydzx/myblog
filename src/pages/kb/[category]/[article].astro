@@ -1,0 +1,50 @@
+---
+import { getCollection, getEntry, render } from "astro:content";
+import Markdown from "@components/misc/Markdown.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+export async function getStaticPaths() {
+	const entries = await getCollection("kb");
+	const paths = entries.map((e) => {
+		const [cat, ...rest] = e.id.split("/");
+		const article = rest.join("/").replace(/\.md$/, "");
+		return { params: { category: cat, article } };
+	});
+	return paths;
+}
+
+const { category, article } = Astro.params;
+if (!category || !article) return new Response("Not Found", { status: 404 });
+
+const entryId = category + "/" + article;
+const entry = await getEntry("kb", entryId);
+if (!entry) return new Response("KB entry not found", { status: 404 });
+
+const { Content } = await render(entry);
+const artTitle = entry.data.title + " - 知识库";
+---
+<MainGridLayout title={artTitle} description={entry.data.summary || entry.data.title}>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-9 py-6 relative w-full">
+			<a href={"/kb/" + category + "/"} class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">
+				{"← 返回 " + category}
+			</a>
+			<h1 class="text-2xl font-bold mb-2">{entry.data.title}</h1>
+			<div class="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)] mb-6">
+				{entry.data.date ? (
+					<span>{"📅 " + entry.data.date.toISOString().slice(0, 10)}</span>
+				) : null}
+				{entry.data.tags && entry.data.tags.length > 0 ? (
+					<span class="flex flex-wrap gap-1">
+						{entry.data.tags.map((t: string) => (
+							<span class="bg-[var(--card-bg-secondary)] px-2 py-0.5 rounded text-xs">{t}</span>
+						))}
+					</span>
+				) : null}
+			</div>
+			<Markdown class="mt-2">
+				<Content />
+			</Markdown>
+		</div>
+	</div>
+</MainGridLayout>

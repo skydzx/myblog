@@ -1,155 +1,123 @@
 ---
-title: Hello World — Welcome to SecLab
+title: 从棋盘密码到棋密
 published: 2026-07-26
-description: 首篇文章，展示代码块、数学公式与 Mermaid 流程图渲染效果。
-tags: [Hello World, Markdown, Demo]
-category: General
+description: 初三午睡课上的一张草稿纸，画了一个坐标系，填了 26 个英文字母。那时候我还不知道，这个无意识的涂鸦叫「棋盘密码」。
+tags: [关于我, 密码学, 成长]
+category: Personal
 draft: false
 ---
 
-## Welcome to SecLab
+## 一、草稿本上的密码
 
-SecLab 是一个专注于 **网络安全 · 密码学 · AI 安全** 的技术博客。本文将展示 Markdown 渲染能力，包括代码高亮、LaTeX 数学公式以及 Mermaid 流程图。
+初三。午睡课。周围同学都趴下了，我睡不着，在草稿本上画了一个坐标系，横轴 5 格，纵轴 5 格，把 26 个英文字母随意填了进去。
 
----
+没什么目的，纯粹觉得好玩。
 
-## Code Blocks
+那时候心里还有一个念头特别强烈——**想当一名黑客**。说不清是从哪部电影还是哪篇文章里看到的，就是觉得这两个字太酷了。能攻破别人的系统，能看见别人看不见的东西。但这个念头一直悬在空中，没有落地。
 
-代码块由 [Expressive Code](https://expressive-code.com/) 渲染，支持行号、折叠和复制按钮。
-
-### Python — AES 加密演示
-
-```python
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad, unpad
-
-
-def aes_encrypt(plaintext: bytes, key: bytes) -> bytes:
-    """AES-256-CBC 加密"""
-    cipher = AES.new(key, AES.MODE_CBC)
-    ct = cipher.encrypt(pad(plaintext, AES.block_size))
-    return cipher.iv + ct
-
-
-def aes_decrypt(ciphertext: bytes, key: bytes) -> bytes:
-    """AES-256-CBC 解密"""
-    iv = ciphertext[:AES.block_size]
-    ct = ciphertext[AES.block_size:]
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    return unpad(cipher.decrypt(ct), AES.block_size)
-```
-
-### C — 格式化字符串漏洞
-
-```c
-#include <stdio.h>
-
-int main() {
-    char flag[64] = "FLAG{t3mpl4te_str1ng_leak}";
-    char buf[128];
-
-    fgets(buf, sizeof(buf), stdin);
-    printf(buf);  // vulnerability: format string bug
-
-    return 0;
-}
-```
-
-### Shell — Nmap 扫描
-
-```shell
-#!/bin/bash
-# 快速端口扫描脚本
-TARGET="10.0.0.1"
-
-echo "[*] Scanning ${TARGET}..."
-nmap -sV -sC -p- --min-rate=1000 -T4 ${TARGET} \
-  -oA scan_results/nmap_${TARGET}_$(date +%Y%m%d)
-echo "[+] Scan complete"
-```
+那张草稿纸后来丢了。但那个坐标系一直印在脑子里。
 
 ---
 
-## LaTeX 数学公式
+## 二、推开那扇门
 
-支持行内公式与块级公式，使用 KaTeX 渲染。
+大一，上了密码学专业课，我才知道——
 
-### 行内公式
+**初三那个午睡课上的涂鸦，叫棋盘密码。**
 
-Shannon 熵的定义：$H(X) = -\sum_{i=1}^{n} P(x_i) \log_2 P(x_i)$
+公元前 2 世纪，希腊人波利比乌斯发明的。两千年后，一个江苏初中生在不知道它存在的情况下，重新把它"发明"了一次。
 
-RSA 加密：$c \equiv m^e \pmod{n}$，解密：$m \equiv c^d \pmod{n}$
+但棋盘密码，不过是密码学的冰山一角。
 
-### 块级公式
+从凯撒密码到维吉尼亚密码，从数据加密标准到高级加密标准，从对称加密到公钥基础设施，从椭圆曲线到格密码——大一那一整年，我像一块海绵，拼命吸水。
 
-**椭圆曲线离散对数问题 (ECDLP)：**
+密码学这扇门，终于推开了。
 
-$$
-Q = k \cdot G \quad (k \in \mathbb{Z}_n)
-$$
+### 不止是密码学
 
-已知 $Q$ 和 $G$，求 $k$ 是计算上不可行的。
+大一不只有密码课。同时开设的**信息安全基础课**，让我第一次真正摸到了"攻击"的边。
 
-**格密码中的 LWE 问题：**
+老师上课不讲虚的，直接放案例：**ARP 欺骗**是怎么让局域网里的流量全部经过攻击者的机器；**APT 组织**是怎么在企业内网里潜伏好几年不被发现；一张看似普通的旅游照片，放大看路牌和地标，就能定位到经纬度——这是开源情报的基本功。
 
-$$
-\mathbf{b} = \mathbf{A} \mathbf{s} + \mathbf{e} \pmod{q}
-$$
+这些攻击手段不是课本上的概念。老师会让我们自己在网上找工具，动手把案例复现一遍。ARP 欺骗就用 Cain & Abel 或者 Ettercap，信息收集就写爬虫，图片定位就去搜 EXIF 元数据。
 
-其中 $\mathbf{A} \in \mathbb{Z}_q^{m \times n}$，$\mathbf{s} \in \mathbb{Z}_q^n$，$\mathbf{e} \in \mathbb{Z}^m$ 为小误差向量。
+那段时间，我同时还在自己折腾几件事：
 
-**贝叶斯定理在入侵检测中的应用：**
+**永恒之蓝漏洞复现。** 这是美国国家安全局泄露的 Windows 漏洞攻击工具，后来被 WannaCry 勒索病毒用到，席卷了全球。我在虚拟机里搭了一台没打补丁的 Windows 7，用下载好的工具打过去——反弹 Shell 弹回来那一刻，手是抖的。不是害怕，是兴奋。一个端口没封好，一个补丁没打上，系统就没了。从防御者的视角看，这是灾难；从学习者的视角看，这是最直观的一课。
 
-$$
-P(\text{attack} \mid \text{alert}) = \frac{P(\text{alert} \mid \text{attack}) \cdot P(\text{attack})}{P(\text{alert})}
-$$
+**在 Kali 上搭建阿帕奇服务器。** 然后用 Metasploit 框架生成一个木马文件，放在服务器上。让物理机访问、下载、执行。执行成功的一瞬间，物理机上的杀毒软件弹窗了——红色警告，木马文件被识别、隔离、清除。那一刻我意识到两件事：第一，免杀是一门真正的学问；第二，杀软和攻击工具之间，就是一场永不停歇的猫鼠游戏。
+
+也是从那时候起，我对安全有了一个最基本的信念：**不亲手搭过靶场、不亲自把漏洞打通过，就不叫学会。**
 
 ---
 
-## Mermaid 流程图
+## 三、大师班
 
-### 渗透测试流程
+大一学期末，学校选拔大师班成员。我在申请表上写了整整两页——写过什么代码、做过什么项目、对什么方向感兴趣。运气好，选上了。
 
-```mermaid
-graph TD
-    A[🕵️ Reconnaissance] --> B{信息收集结果?}
-    B -->|充分| C[🔍 Vulnerability Scanning]
-    B -->|不足| A
-    C --> D[💥 Exploitation]
-    D --> E{获取权限?}
-    E -->|Yes| F[📈 Privilege Escalation]
-    E -->|No| C
-    F --> G[🏴‍☠️ Lateral Movement]
-    G --> H[🎯 Objective Achieved]
-    H --> I[📝 Reporting & Cleanup]
-```
-
-### AI 安全威胁分类
-
-```mermaid
-mindmap
-  root((AI Security))
-    Adversarial Attacks
-      Evasion
-      Poisoning
-      Model Inversion
-    Privacy
-      Membership Inference
-      Differential Privacy
-      Federated Learning Risks
-    LLM Threats
-      Prompt Injection
-      Jailbreak
-      Data Extraction
-      Hallucination
-    Defense
-      Adversarial Training
-      Robust Certification
-      Red Teaming
-```
+大师班里见到了真正的高手，也见识到了行业里真正在做安全的人是什么样子。这里不细说，但一句话总结：**它让我知道安全这条路能走多远。**
 
 ---
 
-> **以上所有内容均在本博客中正确渲染**：代码高亮（Expressive Code + JetBrains Mono）、LaTeX 数学公式（KaTeX）、Mermaid 流程图。
+## 四、大二：在靶场里长肉
+
+大二这一年，技能树开始真正分叉。
+
+**Web 基础。** HTTP 协议、同源策略、Cookie 和 Session、SQL 注入、跨站脚本、跨站请求伪造、文件上传、命令注入——每一个漏洞原理都要追到协议层，不是背八股文。
+
+**Linux 基础。** 从 `ls` 开始，到用户权限、文件系统、进程管理、防火墙规则、系统服务。习惯了在纯黑终端里生活——没有图形界面，只有一行行命令和等待自己输出的光标。
+
+**网络技术基础。** 七层模型、三次握手四次挥手、子网划分、虚拟局域网、路由协议、Wireshark 抓包分析。学网络之前，觉得网络就是连上网线就能上网；学完之后才知道，每一层都是一整个宇宙。
+
+**夺旗竞赛。** 开始打比赛。Web 题和杂项题是主力方向。逆向工程也上了课，但实操偏少——因为那个学期大部分时间在跟老师做项目。
+
+> **项目：安全日志自动标注。**
 >
-> 如果某个模块无法正常显示，请检查 `pnpm dev` 控制台日志。
+> 核心工作：给海量安全日志打标签——按漏洞的危害程度分级、按来源地址出现的频次聚合、标记可疑行为。
+>
+> 本质上是在做数据标注加规则引擎——对着成千上万条日志一行行地看，一条条地标。枯燥吗？枯燥。但正是这个枯燥的活儿，让我学会了看日志的功夫。后来打内网渗透的时候发现，会看日志比会跑扫描器重要十倍。工具是别人的，眼睛是自己的。
+
+### 靶场实战
+
+学习安全的路上，靶场就是健身房。下面这两个靶场，我对着打了很久：
+
+- **DVWA**：英国人写的 PHP 漏洞练习平台，SQL 注入、跨站脚本、跨站请求伪造、文件上传、命令注入，十几个漏洞场景，从低难度到高难度逐级打通。
+- **Pikachu**：国内师傅写的靶场，更贴近中文环境，上手更友好。配合 Burp Suite 抓包分析，每一个漏洞不只是"打出来了"，而是要搞清楚**为什么能打进去、怎么修、怎么防**。
+
+比赛方面，杂项题做得最多：流量分析、内存取证、图片隐写、编码解码、压缩包破解。逆向方向虽然上了课，也摸过 IDA 和 Ghidra，但实操确实偏少——这是以后要补的债。
+
+### 内网渗透
+
+后面开始接触内网渗透。从外围打点到获取第一个立足点，从本地提权到横向移动，从凭据窃取到域控拿下——每一步都是一张新的地图。
+
+把视角从单台机器拉高到整个网络拓扑，这台机器和那台机器之间怎么通信、哪个服务暴露了、哪条路径可以走——看整个网络是一盘棋。
+
+> 这里顺便感谢一下 Team-Moeru 的师傅们，在我内网渗透学习期间提供了很大帮助。
+
+---
+
+## 五、领航杯
+
+后来参加了**领航杯**网络安全竞赛。
+
+团队赛。三天。攻防混战。
+
+细节不展开，结果是——**特等奖**。
+
+那个奖杯搬回来的时候，我在想初三那个午睡课的下午。如果有谁告诉当时的我："嘿，你以后会拿一个网络安全比赛的奖"，我肯定不信。
+
+---
+
+## 六、现在
+
+大三。在常州找到了一份不错的安全工作。每天跟漏洞、流量、日志、渗透测试打交道。
+
+「棋密」这个博客，是我的数字花园——不定时记录安全研究、密码学笔记、工具心得，和路上的碎碎念。
+
+从一张草稿纸走到这里，用了七年。
+
+路还长。
+
+---
+
+> *做安全的，心要静。越想快，越走不远。*

@@ -1,43 +1,37 @@
-# About SecLab
+# About Me
 
-**SecLab** — _Security Laboratory_ — 是一个关于网络安全、密码学与 AI 安全的技术博客。
+**极弈侠** · 常州信息职业技术大学 · 网络安全专业
 
 ---
 
-## 研究方向
+## 我是谁
 
-| 领域 | 关键词 |
+初三在草稿纸上画了一个坐标系填了 26 个字母，那时候还不知道这叫棋盘密码。大一推开密码学的大门，加入大师班，从此一头扎进安全的世界。
+
+打过 CTF，混过靶场，写过日志标注系统，拿过领航杯特等奖。现在在常州从事安全工作。
+
+---
+
+## 技能栈
+
+| 方向 | 关键词 |
 |------|--------|
-| **网络安全** | 渗透测试、漏洞挖掘、流量分析、威胁情报 |
-| **密码学** | 后量子密码 (PQC)、同态加密、零知识证明、TLS/SSL |
-| **AI 安全** | 对抗样本、模型逆向、对齐、LLM 越狱与防御 |
+| **Web 安全** | SQL注入、XSS、CSRF、SSRF、文件上传、命令注入 |
+| **内网渗透** | 信息收集、横向移动、提权、持久化、域渗透 |
+| **密码学** | 对称/非对称加密、哈希、PKI、格密码入门 |
+| **CTF** | Web、MISC、入门逆向 |
+| **编程语言** | Python、C、Bash、Golang |
+| **工具链** | Burp Suite、Nmap、Metasploit、Wireshark、IDA |
 
 ---
 
-## 关于作者
+## 这个博客
 
-`whoami`
+棋密 = 棋盘密码 + 信息安全。
 
-- 🛡️ 网络安全研究员 / 密码学爱好者
-- 💻 低层次语言 (C/Rust/Assembly) + Python 安全工具开发
-- 🔬 对 AI + Security 交叉领域有浓厚兴趣
-- 📡 长期活跃于 CTF (Capture The Flag) 竞赛
+写给自己看的东西——密码学笔记、漏洞复现、工具技巧、技术杂谈。如果能帮到正在走同样路的人，那就是意外之喜。
 
 ---
 
-## 技术栈
-
-本站基于以下开源项目构建：
-
-- **[Astro](https://astro.build/)** — 静态站点生成器
-- **[Fuwari](https://github.com/saicaca/fuwari)** — 博客主题
-- **[Svelte](https://svelte.dev/)** — UI 交互组件
-- **[Tailwind CSS](https://tailwindcss.com/)** — 原子化样式
-- **[Expressive Code](https://expressive-code.com/)** — 代码块高亮
-- **[KaTeX](https://katex.org/)** — 数学公式渲染
-- **[Mermaid](https://mermaid.js.org/)** — 图表与流程图
-
----
-
-> _Security is not a product, but a process._
-> — Bruce Schneier
+> *初三午睡课的草稿本上，26 个字母被随意填进了一个坐标系。*
+> *两千年后，一个希腊人的脑洞，被一个中国小孩重新发明了一次。*
