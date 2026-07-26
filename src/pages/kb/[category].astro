@@ -39,7 +39,7 @@ const pageDesc = category + " 分类下的所有文章";
 			</p>
 			<div class="space-y-3">
 				{articles.map((a) => {
-					const slug = a.id.replace(category + "/", "");
+					const slug = a.id.replace(category + "/", "").replace(/\.md$/, "");
 					const href = "/kb/" + category + "/" + slug + "/";
 					return (
 						<a href={href} class="card-base px-4 py-3 block transition hover:border-[var(--primary)] hover:shadow-sm no-underline">
