@@ -53,6 +53,10 @@ const mindmapDiagram = `mindmap
       GitHub CI/CD
       Custom Domain`;
 
+const docPages = [
+	{ name: "架构文档", slug: "architecture", desc: "目录职责、数据模型、路由表、配置参考、插件清单——项目真源文档" },
+];
+
 const skills = [
 	{ name: "Software Testing Skill", slug: "software-testing", desc: "Playwright 自动化测试、环境检查、问题定位与修复流程" },
 	{ name: "System Testing Skill", slug: "system-testing", desc: "AI 知识库系统端到端测试，覆盖 Query、Knowledge、Settings 页面" },
@@ -75,6 +79,20 @@ const skills = [
 			<!-- Tech Stack -->
 			<h2 class="text-xl font-semibold mt-10 mb-4">技术栈</h2>
 			<div class="mermaid mb-8">{mindmapDiagram}</div>
+
+			<!-- Doc Pages -->
+			<h2 class="text-xl font-semibold mt-10 mb-4">工程文档</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+				{docPages.map((d) => (
+					<a
+						href={"/docs/" + d.slug + "/"}
+						class="card-base px-4 py-4 block transition hover:border-[var(--primary)] hover:shadow-sm no-underline"
+					>
+						<div class="font-semibold text-[var(--text)] mb-1">{d.name}</div>
+						<div class="text-sm text-[var(--text-muted)]">{d.desc}</div>
+					</a>
+				))}
+			</div>
 
 			<!-- Skills -->
 			<h2 class="text-xl font-semibold mt-10 mb-4">Claude Code Skills</h2>
