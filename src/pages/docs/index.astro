@@ -66,25 +66,33 @@ const skills = [
 ---
 <MainGridLayout title="文档" description="Project Documentation & Architecture">
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
-		<div class="card-base z-10 px-9 py-6 relative w-full">
+		<div class="card-base z-10 px-9 py-6 relative w-full prose dark:prose-invert prose-base !max-w-none custom-md leading-relaxed">
 
-			<h1 class="text-2xl font-bold mb-2">项目文档</h1>
-			<p class="text-[var(--text-muted)] mb-8 leading-relaxed">
-				本站基于 Astro + Fuwari 构建，部署于 Cloudflare Pages。以下为项目架构、技术栈及开发文档索引。
-			</p>
+		<h1 class="text-2xl font-bold mb-2">项目文档</h1>
+		<p class="text-[var(--text-muted)] mb-6 leading-relaxed">
+			本站基于 Astro + Fuwari 构建，部署于 Cloudflare Pages。以下为项目架构、技术栈及开发文档索引。
+		</p>
 
-			<!-- Architecture -->
-			<h2 class="text-xl font-semibold mt-10 mb-4">项目架构</h2>
-			<p class="text-sm text-[var(--text-muted)] mb-3">博客内容经 Markdown 解析后，分别由 Expressive Code、KaTeX、Mermaid 渲染，最终通过 Pagefind 建立全文索引。</p>
-			<div class="mermaid mb-8">{archDiagram}</div>
+		<hr class="my-8 border-[var(--border-color)]" />
 
-			<!-- Tech Stack -->
-			<h2 class="text-xl font-semibold mt-10 mb-4">技术栈</h2>
-			<div class="mermaid mb-8">{mindmapDiagram}</div>
+		<!-- Architecture -->
+		<h2 class="text-xl font-semibold mb-2">项目架构</h2>
+		<p class="text-sm text-[var(--text-muted)] mb-4 leading-relaxed">博客内容经 Markdown 解析后，分别由 Expressive Code、KaTeX、Mermaid 渲染，最终通过 Pagefind 建立全文索引。</p>
+		<div class="card-base bg-[var(--card-bg-secondary)] p-4 mb-8"><div class="mermaid">{archDiagram}</div></div>
 
-			<!-- Doc Pages -->
-			<h2 class="text-xl font-semibold mt-10 mb-4">工程文档</h2>
-			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+		<hr class="my-8 border-[var(--border-color)]" />
+
+		<!-- Tech Stack -->
+		<h2 class="text-xl font-semibold mb-2">技术栈</h2>
+		<p class="text-sm text-[var(--text-muted)] mb-4 leading-relaxed">项目采用 Astro 静态站点生成，Svelte 驱动交互组件，Tailwind CSS 原子化样式，Fuwari 主题提供基础布局。</p>
+		<div class="card-base bg-[var(--card-bg-secondary)] p-4 mb-8"><div class="mermaid">{mindmapDiagram}</div></div>
+
+		<hr class="my-8 border-[var(--border-color)]" />
+
+		<!-- Doc Pages -->
+		<h2 class="text-xl font-semibold mb-2">工程文档</h2>
+		<p class="text-sm text-[var(--text-muted)] mb-4 leading-relaxed">开发前必读的三份真源文档，定义项目规范与架构。</p>
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
 				{docPages.map((d) => (
 					<a
 						href={"/docs/" + d.slug + "/"}
@@ -96,12 +104,14 @@ const skills = [
 				))}
 			</div>
 
+			<hr class="my-8 border-[var(--border-color)]" />
+
 			<!-- Skills -->
-			<h2 class="text-xl font-semibold mt-10 mb-4">Claude Code Skills</h2>
-			<p class="text-sm text-[var(--text-muted)] mb-4">
+			<h2 class="text-xl font-semibold mb-2">Claude Code Skills</h2>
+			<p class="text-sm text-[var(--text-muted)] mb-4 leading-relaxed">
 				以下 Skills 定义于 AI 知识库项目中，供 Claude Code 代理调用，现存档于本站。
 			</p>
-			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
 				{skills.map((s) => (
 					<a
 						href={"/docs/" + s.slug + "/"}
@@ -113,8 +123,11 @@ const skills = [
 				))}
 			</div>
 
+			<hr class="my-8 border-[var(--border-color)]" />
+
 			<!-- Directory Structure -->
-			<h2 class="text-xl font-semibold mt-10 mb-4">项目结构</h2>
+			<h2 class="text-xl font-semibold mb-2">项目结构</h2>
+			<p class="text-sm text-[var(--text-muted)] mb-4 leading-relaxed">项目源码目录树，遵循开发规范中定义的目录边界。</p>
 			<div class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-xs leading-relaxed overflow-x-auto text-[var(--text-muted)]">
 src/
 ├── <span class="text-[var(--primary)]">content/</span>
