@@ -1,24 +1,28 @@
 ---
-import { getCollection, getEntry, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 
 export async function getStaticPaths() {
 	const entries = await getCollection("kb");
-	const paths = entries.map((e) => {
-		const [cat, ...rest] = e.id.split("/");
-		const article = rest.join("/").replace(/\.md$/, "");
-		return { params: { category: cat, article } };
+	return entries.map((e) => {
+		const parts = e.id.split("/");
+		const cat = parts[0];
+		const article = parts.slice(1).join("/").replace(/\.md$/, "");
+		return {
+			params: { category: cat, article },
+			props: { entry: e },
+		};
 	});
-	return paths;
 }
 
-const { category, article } = Astro.params;
-if (!category || !article) return new Response("Not Found", { status: 404 });
-
-const entryId = category + "/" + article;
-const entry = await getEntry("kb", entryId);
+// 直接从 getStaticPaths 的 props 取 entry 对象，
+// 避免 getEntry 按 id 重新解析时的中文路径匹配问题
+const { entry } = Astro.props;
 if (!entry) return new Response("KB entry not found", { status: 404 });
+
+const parts = entry.id.split("/");
+const cat = parts[0];
 
 const { Content } = await render(entry);
 const artTitle = entry.data.title + " - 知识库";
@@ -26,8 +30,8 @@ const artTitle = entry.data.title + " - 知识库";
 <MainGridLayout title={artTitle} description={entry.data.summary || entry.data.title}>
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
 		<div class="card-base z-10 px-9 py-6 relative w-full">
-			<a href={"/kb/" + category + "/"} class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">
-				{"← 返回 " + category}
+			<a href={"/kb/" + cat + "/"} class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">
+				{"← 返回 " + cat}
 			</a>
 			<h1 class="text-2xl font-bold mb-2">{entry.data.title}</h1>
 			<div class="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)] mb-6">
