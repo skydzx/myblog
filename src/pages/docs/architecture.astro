@@ -7,8 +7,9 @@ const routeTableBody = `
 <tr><td>/archive/</td><td>pages/archive.astro</td><td>归档页，按年份分组</td></tr>
 <tr><td>/about/</td><td>pages/about.astro</td><td>关于页</td></tr>
 <tr><td>/kb/</td><td>pages/kb/index.astro</td><td>知识库首页，展示分类卡片</td></tr>
-<tr><td>/kb/{category}/</td><td>pages/kb/[category].astro</td><td>分类文章列表</td></tr>
-<tr><td>/kb/{category}/{article}/</td><td>pages/kb/[category]/[article].astro</td><td>知识库文章</td></tr>
+<tr><td>/kb/{category}/</td><td>pages/kb/[...slug].astro</td><td>大类页：显示子分类 + 直属文章</td></tr>
+<tr><td>/kb/{category}/{subcategory}/</td><td>pages/kb/[...slug].astro</td><td>子分类页：显示文章列表</td></tr>
+<tr><td>/kb/{category}/{subcategory}/{article}/</td><td>pages/kb/[...slug].astro</td><td>知识库文章</td></tr>
 <tr><td>/docs/</td><td>pages/docs/index.astro</td><td>项目文档首页</td></tr>
 <tr><td>/docs/{page}/</td><td>pages/docs/{page}.astro</td><td>各文档页</td></tr>
 <tr><td>/rss.xml</td><td>pages/rss.xml.ts</td><td>RSS 订阅源</td></tr>
@@ -37,10 +38,10 @@ const routeTableBody = `
 				<thead><tr><th>目录</th><th>职责</th><th>约束</th></tr></thead>
 				<tbody>
 					<tr><td><code>src/content/posts/</code></td><td>博客文章，Markdown + frontmatter</td><td>文件名即 URL slug；每个文件一篇独立文章</td></tr>
-					<tr><td><code>src/content/kb/</code></td><td>知识库，按分类建子目录</td><td>一级子目录名 = 分类名；文件名不含日期前缀，写主题名</td></tr>
+					<tr><td><code>src/content/kb/</code></td><td>知识库，按「大类/子分类」建两级目录</td><td>一级目录 = 大类，二级目录 = 子分类；文件放最深层，文件名不含日期前缀</td></tr>
 					<tr><td><code>src/content/spec/</code></td><td>固定页面（About 等）</td><td>文件名即页面标识，由对应路由页手动 <code>getEntry</code> 取用</td></tr>
 					<tr><td><code>src/pages/</code></td><td>Astro 文件路由，每个 <code>.astro</code> 对应一个 URL</td><td>动态路由用 <code>[param].astro</code>，需实现 <code>getStaticPaths</code></td></tr>
-					<tr><td><code>src/pages/kb/</code></td><td>知识库路由层（index + 分类 + 文章）</td><td>三文件结构不可合并</td></tr>
+					<tr><td><code>src/pages/kb/</code></td><td>知识库路由层（index + catch-all）</td><td>index.astro 为首页，[...slug].astro 统一处理任意层级</td></tr>
 					<tr><td><code>src/pages/docs/</code></td><td>项目文档路由层</td><td>每页独立 <code>.astro</code> 文件，内容直写模板</td></tr>
 					<tr><td><code>src/layouts/</code></td><td>页面级布局组件</td><td><code>MainGridLayout</code> 是通用壳；<code>Layout</code> 是最外层 HTML</td></tr>
 					<tr><td><code>src/components/</code></td><td>可复用 UI 组件</td><td>按 control / misc / widget 分组</td></tr>
@@ -76,8 +77,8 @@ const routeTableBody = `
 			</table>
 
 			<h3>3.2 kb（知识库）</h3>
-			<p>文件路径：<code>src/content/kb/</code> 下按分类建子目录，如 <code>密码学/aes-modes.md</code></p>
-			<p>分类由一级子目录名决定，不支持嵌套。文件名不含日期前缀，直接写主题名。</p>
+			<p>文件路径：<code>src/content/kb/{大类}/{子分类}/文章.md</code>，如 <code>网络安全/渗透测试/nmap-cheatsheet.md</code></p>
+			<p>两级结构：一级目录 = 大类，二级目录 = 子分类，文章文件放在最深层。当前支持两层嵌套。文件名不含日期前缀，直接写主题名。</p>
 			<table>
 				<thead><tr><th>字段</th><th>类型</th><th>必填</th><th>默认值</th><th>说明</th></tr></thead>
 				<tbody>
@@ -181,8 +182,9 @@ const routeTableBody = `
 3. 在 docs/index.astro 的页面列表中添加入口
 			</pre>
 
-			<h3>新增知识库分类</h3>
-			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">mkdir src/content/kb/新分类名
+			<h3>新增知识库大类 / 子分类</h3>
+			<pre class="card-base bg-[var(--card-bg-secondary)] p-4 font-mono text-sm overflow-x-auto mb-6 leading-relaxed text-[var(--text-muted)]">mkdir src/content/kb/新大类
+mkdir src/content/kb/新大类/新子分类
 # 放入 .md 文件后，路由自动生效
 			</pre>
 

@@ -1,43 +1,66 @@
 ---
 import { getCollection } from "astro:content";
-import Markdown from "@components/misc/Markdown.astro";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
 
 const allEntries = await getCollection("kb");
 
-type CatInfo = { name: string; count: number };
+// 构建两层分类树：大类 → 子分类
+type Subcat = { name: string; count: number };
+type CatInfo = { name: string; count: number; subs: Subcat[] };
+
 const cats: Record<string, CatInfo> = {};
 for (const entry of allEntries) {
-	const [cat] = entry.id.split("/");
-	if (!cat) continue;
-	if (!cats[cat]) cats[cat] = { name: cat, count: 0 };
+	const parts = entry.id.replace(/\.md$/, "").split("/");
+	const cat = parts[0];
+	const sub = parts.length >= 3 ? parts[1] : null;
+
+	if (!cats[cat]) cats[cat] = { name: cat, count: 0, subs: [] };
 	cats[cat].count++;
+
+	if (sub && !cats[cat].subs.find((s) => s.name === sub)) {
+		cats[cat].subs.push({ name: sub, count: 0 });
+	}
+	if (sub) {
+		const subRef = cats[cat].subs.find((s) => s.name === sub);
+		if (subRef) subRef.count++;
+	}
 }
+
 const categoryList = Object.values(cats).sort((a, b) =>
 	a.name.localeCompare(b.name, "zh-CN"),
 );
-
 const totalCount = allEntries.length;
 ---
 <MainGridLayout title="知识库" description="Personal Knowledge Base">
 	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
 		<div class="card-base z-10 px-9 py-6 relative w-full">
 			<h1 class="text-2xl font-bold mb-2">知识库</h1>
-			<p class="text-sm text-[var(--text-muted)] mb-6">
-				共计 {totalCount} 篇文章，{categoryList.length} 个分类。
+			<p class="text-sm text-[var(--text-muted)] mb-6 leading-relaxed">
+				共计 {totalCount} 篇文章，{categoryList.length} 个大类。
 			</p>
 
 			<!-- 分类树 -->
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 				{categoryList.map((cat) => (
 					<a
-						href={`/kb/${cat.name}/`}
-						class="card-base px-4 py-3 flex items-center justify-between transition hover:border-[var(--primary)] hover:shadow-sm no-underline"
+						href={"/kb/" + cat.name + "/"}
+						class="card-base px-4 py-4 block transition hover:border-[var(--primary)] hover:shadow-sm no-underline"
 					>
-						<span class="font-medium text-[var(--text)]">{cat.name}</span>
-						<span class="text-xs text-[var(--text-muted)] bg-[var(--card-bg-secondary)] px-2 py-0.5 rounded-full">
-							{cat.count}
-						</span>
+						<div class="flex items-center justify-between mb-2">
+							<span class="font-semibold text-[var(--text)]">{cat.name}</span>
+							<span class="text-xs text-[var(--text-muted)] bg-[var(--card-bg-secondary)] px-2 py-0.5 rounded-full">
+								{cat.count}
+							</span>
+						</div>
+						{cat.subs.length > 0 && (
+							<div class="flex flex-wrap gap-1.5">
+								{cat.subs.map((s) => (
+									<span class="text-xs text-[var(--text-muted)] bg-[var(--card-bg-secondary)] px-2 py-0.5 rounded">
+										{s.name} · {s.count}
+									</span>
+								))}
+							</div>
+						)}
 					</a>
 				))}
 			</div>
