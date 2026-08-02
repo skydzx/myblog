@@ -10,6 +10,13 @@
     .card-shadow {
         @apply drop-shadow-[0_2px_4px_rgba(0,0,0,0.005)]
     }
+    .font-code {
+        font-family: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .post-card {
+        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition
+               hover:bg-[var(--btn-card-bg-hover)] active:bg-[var(--btn-card-bg-active)];
+    }
     .expand-animation {
         @apply relative before:ease-out before:transition active:bg-none hover:before:bg-[var(--btn-plain-bg-hover)] active:before:bg-[var(--btn-plain-bg-active)] z-0
         before:absolute before:rounded-[inherit] before:inset-0 before:scale-[0.85] hover:before:scale-100 before:-z-10
