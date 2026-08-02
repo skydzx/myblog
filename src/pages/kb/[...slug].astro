@@ -1,7 +1,26 @@
 ---
-import { getCollection, render } from "astro:content";
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+
+type SubcatItem = { name: string; count: number };
+
+type ArticleData = {
+	cat: string;
+	subcat: string | null;
+	backHref: string;
+	backLabel: string;
+};
+
+type CategoryData = {
+	prefixStr: string;
+	breadcrumb: string[];
+	subcatList: SubcatItem[];
+	articles: CollectionEntry<"kb">[];
+	isEmpty: boolean;
+};
+
+type RenderContent = Awaited<ReturnType<typeof render>>["Content"];
 
 // 统一处理任意深度的知识库路由：
 //   /kb/{category}/                          → 大类页（列出子分类 + 直属文章）
@@ -36,9 +55,15 @@ const { slug } = Astro.params;
 const { entry, prefix } = Astro.props;
 
 // ---- 前置计算：文章 or 分类页 ----
-let Content: any = null;
-let articleData: any = null;
-let categoryData: any = null;
+let Content: RenderContent | null = null;
+let articleData: ArticleData | null = null;
+let categoryData: CategoryData = {
+	prefixStr: "",
+	breadcrumb: [],
+	subcatList: [],
+	articles: [],
+	isEmpty: true,
+};
 
 if (entry) {
 	// 文章页
@@ -52,8 +77,8 @@ if (entry) {
 	articleData = {
 		cat,
 		subcat,
-		backHref: subcat ? "/kb/" + cat + "/" + subcat + "/" : "/kb/" + cat + "/",
-		backLabel: subcat ? "返回 " + cat + " / " + subcat : "返回 " + cat,
+		backHref: subcat ? `/kb/${cat}/${subcat}/` : `/kb/${cat}/`,
+		backLabel: subcat ? `返回 ${cat} / ${subcat}` : `返回 ${cat}`,
 	};
 } else {
 	// 分类页（大类 或 子分类）
@@ -64,7 +89,7 @@ if (entry) {
 	const subcategories = new Set<string>();
 	for (const e of allEntries) {
 		const id = e.id.replace(/\.md$/, "");
-		if (!id.startsWith(prefixStr + "/")) continue;
+		if (!id.startsWith(`${prefixStr}/`)) continue;
 		const parts = id.split("/");
 		if (parts.length > prefixLen) {
 			subcategories.add(parts[prefixLen]);
@@ -74,7 +99,9 @@ if (entry) {
 	const articles = allEntries
 		.filter((e) => {
 			const id = e.id.replace(/\.md$/, "");
-			return id.startsWith(prefixStr + "/") && id.split("/").length === prefixLen + 1;
+			return (
+				id.startsWith(`${prefixStr}/`) && id.split("/").length === prefixLen + 1
+			);
 		})
 		.sort((a, b) => {
 			const da = a.data.date ?? new Date(0);
@@ -86,7 +113,7 @@ if (entry) {
 		name: sub,
 		count: allEntries.filter((e) => {
 			const id = e.id.replace(/\.md$/, "");
-			return id.startsWith(prefixStr + "/" + sub + "/");
+			return id.startsWith(`${prefixStr}/${sub}/`);
 		}).length,
 	}));
 
@@ -103,11 +130,11 @@ if (entry) {
 ---
 {
 	articleData ? (
-		<MainGridLayout title={entry!.data.title + " - 知识库"} description={entry!.data.summary || entry!.data.title}>
+		<MainGridLayout title={`${entry!.data.title} - 知识库`} description={entry!.data.summary || entry!.data.title}>
 			<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
 				<div class="card-base z-10 px-9 py-6 relative w-full">
 					<a href={articleData.backHref} class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">
-						{"← " + articleData.backLabel}
+						{`← ${articleData.backLabel}`}
 					</a>
 					<h1 class="text-2xl font-bold mb-2">{entry!.data.title}</h1>
 					<div class="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)] mb-6">
@@ -123,15 +150,15 @@ if (entry) {
 						) : null}
 					</div>
 					<Markdown class="mt-2">
-						<Content />
+						{Content ? <Content /> : null}
 					</Markdown>
 				</div>
 			</div>
 		</MainGridLayout>
 	) : (
 		<MainGridLayout
-			title={categoryData.breadcrumb[categoryData.breadcrumb.length - 1] + " - 知识库"}
-			description={categoryData.breadcrumb[categoryData.breadcrumb.length - 1] + " - 知识库"}
+			title={`${categoryData.breadcrumb[categoryData.breadcrumb.length - 1]} - 知识库`}
+			description={`${categoryData.breadcrumb[categoryData.breadcrumb.length - 1]} - 知识库`}
 		>
 			<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
 				<div class="card-base z-10 px-9 py-6 relative w-full">
@@ -145,7 +172,7 @@ if (entry) {
 							<span class="flex items-center gap-1">
 								{i > 0 && <span>/</span>}
 								{i < categoryData.breadcrumb.length - 1 ? (
-									<a href={"/kb/" + categoryData.breadcrumb.slice(0, i + 1).join("/") + "/"} class="hover:text-[var(--primary)] no-underline">
+									<a href={`/kb/${categoryData.breadcrumb.slice(0, i + 1).join("/")}/`} class="hover:text-[var(--primary)] no-underline">
 										{seg}
 									</a>
 								) : (
@@ -164,7 +191,7 @@ if (entry) {
 							<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
 								{categoryData.subcatList.map((sub) => (
 									<a
-										href={"/kb/" + categoryData.prefixStr + "/" + sub.name + "/"}
+										href={`/kb/${categoryData.prefixStr}/${sub.name}/`}
 										class="card-base px-4 py-3 flex items-center justify-between transition hover:border-[var(--primary)] hover:shadow-sm no-underline"
 									>
 										<span class="font-medium text-[var(--text)]">{sub.name}</span>
@@ -184,7 +211,7 @@ if (entry) {
 							<div class="space-y-3">
 								{categoryData.articles.map((a) => {
 									const id = a.id.replace(/\.md$/, "");
-									const href = "/kb/" + id + "/";
+									const href = `/kb/${id}/`;
 									return (
 										<a href={href} class="card-base px-4 py-3 block transition hover:border-[var(--primary)] hover:shadow-sm no-underline">
 											<div class="flex items-start justify-between gap-4">
