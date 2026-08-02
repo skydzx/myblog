@@ -10,6 +10,7 @@ import { LinkPreset } from "./types/config";
 export const siteConfig: SiteConfig = {
 	title: "棋密",
 	subtitle: "Network Security · Cryptography · AI Security",
+	siteStart: "2026-07-26",
 	lang: "zh_CN",
 	themeColor: {
 		hue: 160,
@@ -28,6 +29,13 @@ export const siteConfig: SiteConfig = {
 	toc: {
 		enable: true,
 		depth: 2,
+	},
+	announcement: {
+		enable: true,
+		title: "公告",
+		content: "欢迎来到棋密，记录网络安全 / 密码学 / CTF 的学习与实践。",
+		link: "/kb/",
+		linkText: "进入知识库 →",
 	},
 	favicon: [],
 };
@@ -58,7 +66,12 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
-			url: "https://github.com/",
+			url: "https://github.com/skydzx",
+		},
+		{
+			name: "RSS",
+			icon: "fa6-solid:rss",
+			url: "/rss.xml",
 		},
 	],
 };

@@ -3,6 +3,8 @@ import type { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
 export type SiteConfig = {
 	title: string;
 	subtitle: string;
+	/** 建站起始日期（YYYY-MM-DD），用于终端 uptime 统计 */
+	siteStart: string;
 
 	lang:
 		| "en"
@@ -33,6 +35,13 @@ export type SiteConfig = {
 	toc: {
 		enable: boolean;
 		depth: 1 | 2 | 3;
+	};
+	announcement: {
+		enable: boolean;
+		title: string;
+		content: string;
+		link?: string;
+		linkText?: string;
 	};
 
 	favicon: Favicon[];
