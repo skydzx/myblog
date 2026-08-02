@@ -1,0 +1,24 @@
+---
+interface Props {
+	class?: string;
+}
+const className = Astro.props.class;
+
+const GRID_POSITIONS = [4, 8, 12, 16, 20] as const;
+
+const gridDots = GRID_POSITIONS.flatMap((y) =>
+	GRID_POSITIONS.map((x) => ({ x, y })),
+);
+const diagonalDots = GRID_POSITIONS.map((p) => ({ x: p, y: p }));
+---
+
+<!-- Polybius 密码格：5×5 点阵 + 主色对角线（棋密品牌标识） -->
+<svg viewBox="0 0 24 24" fill="none" class={className} aria-hidden="true">
+	<rect x="1" y="1" width="22" height="22" rx="5.5" fill="var(--terminal-bg)" />
+	<g fill="var(--terminal-muted)">
+		{gridDots.map((d) => <circle cx={d.x} cy={d.y} r="1" />)}
+	</g>
+	<g fill="var(--terminal-prompt)">
+		{diagonalDots.map((d) => <circle cx={d.x} cy={d.y} r="1.6" />)}
+	</g>
+</svg>
