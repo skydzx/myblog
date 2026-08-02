@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+
+const kbEntries = await getCollection("kb");
+const RECENT_COUNT = 6;
+
+const recentKb = kbEntries
+	.sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
+	.slice(0, RECENT_COUNT);
+---
+
+<section class="mb-4 onload-animation">
+	<h2 class="font-bold transition text-lg text-neutral-900 dark:text-neutral-100 relative ml-8 mt-2 mb-3
+		before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+		before:absolute before:left-[-16px] before:top-[5.5px]">
+		知识库精选
+	</h2>
+	<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+		{recentKb.map((entry) => {
+			const id = entry.id.replace(/\.md$/, "");
+			const category = entry.id.split("/")[0];
+			return (
+				<a
+					href={`/kb/${id}/`}
+					class="card-base px-4 py-3 block transition border border-transparent hover:border-[var(--primary)] no-underline"
+				>
+					<div class="flex items-center justify-between gap-2">
+						<span class="text-xs font-medium text-[var(--primary)] truncate">{category}</span>
+						{entry.data.date && (
+							<span class="text-xs text-[var(--text-muted)] whitespace-nowrap shrink-0">
+								{entry.data.date.toISOString().slice(0, 7)}
+							</span>
+						)}
+					</div>
+					<div class="font-medium text-[var(--text)] line-clamp-1 mt-1">{entry.data.title}</div>
+					{entry.data.summary && (
+						<p class="text-sm text-[var(--text-muted)] mt-1 line-clamp-2">{entry.data.summary}</p>
+					)}
+				</a>
+			);
+		})}
+	</div>
+</section>
