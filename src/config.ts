@@ -76,6 +76,13 @@ export const profileConfig: ProfileConfig = {
 	],
 };
 
+// 音乐播放器音轨列表：把 mp3 文件放入 public/music/，然后在此按格式填写。
+// 例：{ title: "歌名", artist: "作者", src: "/music/01-track.mp3" }
+export const musicConfig = {
+	enable: true,
+	tracks: [],
+};
+
 export const licenseConfig: LicenseConfig = {
 	enable: true,
 	name: "CC BY-NC-SA 4.0",

@@ -1,6 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
-import { siteConfig } from "../../config";
+import { musicConfig, siteConfig } from "../../config";
 import Announcement from "./Announcement.svelte";
 import Categories from "./Categories.astro";
 import MiniPlayer from "./MiniPlayer.svelte";
@@ -30,7 +30,7 @@ const isKbOrDocs = pathname.startsWith("/kb/") || pathname.startsWith("/docs/");
                 linkText={siteConfig.announcement.linkText}
             ></Announcement>
         )}
-        <MiniPlayer client:load></MiniPlayer>
+        {musicConfig.enable && <MiniPlayer client:load tracks={musicConfig.tracks}></MiniPlayer>}
     </div>
     {!isKbOrDocs && (
         <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
