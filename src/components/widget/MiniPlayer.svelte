@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
+	import { onDestroy } from "svelte";
 
-	type Track = { title: string; artist: string; src: string };
+	type Track = { title: string; artist: string; src: string; cover?: string };
 
 	interface Props {
 		tracks: Track[];
@@ -9,12 +10,18 @@
 	let { tracks }: Props = $props();
 
 	let audio: HTMLAudioElement | undefined;
+	let canvas: HTMLCanvasElement | undefined;
 	let current = $state(0);
 	let playing = $state(false);
 	let currentTime = $state(0);
 	let duration = $state(0);
 	let volume = $state(70);
 	let muted = $state(false);
+
+	// ---- Web Audio 可视化（Mineradio 风格）----
+	let audioContext: AudioContext | undefined;
+	let analyser: AnalyserNode | undefined;
+	let rafId: number | undefined;
 
 	const prefersReduced =
 		typeof window !== "undefined" &&
@@ -27,6 +34,51 @@
 		return `${m}:${sec.toString().padStart(2, "0")}`;
 	};
 
+	const primaryColor = (): string => {
+		const c = getComputedStyle(document.documentElement).getPropertyValue("--primary").trim();
+		return c || "#22d3ee";
+	};
+
+	const initVisualizer = () => {
+		if (!audio || audioContext || !canvas) return;
+		const Ctx = window.AudioContext || (window as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+		if (!Ctx) return;
+		audioContext = new Ctx();
+		const source = audioContext.createMediaElementSource(audio);
+		analyser = audioContext.createAnalyser();
+		analyser.fftSize = 128;
+		source.connect(analyser);
+		analyser.connect(audioContext.destination);
+		draw();
+	};
+
+	const draw = () => {
+		if (!analyser || !canvas) return;
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+		const data = new Uint8Array(analyser.frequencyBinCount);
+		analyser.getByteFrequencyData(data);
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		const color = primaryColor();
+		const barCount = data.length;
+		const barW = canvas.width / barCount;
+		ctx.globalAlpha = 0.7;
+		for (let i = 0; i < barCount; i++) {
+			const h = Math.max(2, (data[i] / 255) * (canvas.height - 2));
+			ctx.fillStyle = color;
+			ctx.fillRect(i * barW, canvas.height - h, barW - 1, h);
+		}
+		ctx.globalAlpha = 1;
+		rafId = requestAnimationFrame(draw);
+	};
+
+	const ensureVisualizer = () => {
+		if (!audio || !canvas) return;
+		initVisualizer();
+		if (audioContext && audioContext.state === "suspended") audioContext.resume();
+	};
+
+	// 切歌时 src 变化 → 重新加载
 	let previousCurrent = $state(-1);
 	$effect(() => {
 		const idx = current;
@@ -46,6 +98,7 @@
 
 	const toggle = () => {
 		if (!audio) return;
+		ensureVisualizer();
 		if (audio.paused) audio.play().catch(() => {});
 		else audio.pause();
 	};
@@ -78,6 +131,11 @@
 	const toggleMute = () => {
 		muted = !muted;
 	};
+
+	onDestroy(() => {
+		if (rafId) cancelAnimationFrame(rafId);
+		audioContext?.close();
+	});
 </script>
 
 <audio
@@ -100,11 +158,17 @@
 		<p class="text-sm text-[var(--text-muted)] leading-relaxed">暂无音乐。将 mp3 放入 <code class="font-code text-xs bg-[var(--btn-regular-bg)] px-1 py-0.5 rounded">public/music/</code> 后更新配置即可。</p>
 	{:else}
 	<div class="flex items-center gap-3">
-		<!-- 封面占位 -->
-		<div class="w-14 h-14 rounded-xl shrink-0 bg-gradient-to-br from-[var(--primary)] to-[var(--btn-regular-bg)] flex items-center justify-center"
-			class:animate-spin={playing && !prefersReduced}>
-			<Icon icon="material-symbols:music-note-rounded" class="text-2xl text-white/90" />
-		</div>
+		<!-- 封面 -->
+		{#if tracks[current]?.cover}
+			<img src={tracks[current].cover} alt="" loading="lazy"
+				class="w-14 h-14 rounded-xl shrink-0 object-cover"
+				class:animate-spin={playing && !prefersReduced} />
+		{:else}
+			<div class="w-14 h-14 rounded-xl shrink-0 bg-gradient-to-br from-[var(--primary)] to-[var(--btn-regular-bg)] flex items-center justify-center"
+				class:animate-spin={playing && !prefersReduced}>
+				<Icon icon="material-symbols:music-note-rounded" class="text-2xl text-white/90" />
+			</div>
+		{/if}
 
 		<!-- 歌名 / 作者 -->
 		<div class="min-w-0 flex-1">
@@ -113,12 +177,16 @@
 		</div>
 	</div>
 
+	<!-- 可视化（Web Audio 频谱） -->
+	<canvas bind:this={canvas} width="200" height="36" class="w-full h-9 mt-3 rounded-md"
+		class:opacity-0={!playing || prefersReduced} aria-hidden="true"></canvas>
+
 	<!-- 进度条 + 时间 -->
 	<input
 		type="range" min="0" max={duration || 0} step="1"
 		value={currentTime}
 		on:input={(e) => seekTo(Number((e.currentTarget as HTMLInputElement).value))}
-		class="mt-3 w-full h-1.5 accent-[var(--primary)]"
+		class="mt-1 w-full h-1.5 accent-[var(--primary)]"
 		aria-label="播放进度"
 		disabled={!tracks[current]?.src}
 	/>

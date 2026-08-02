@@ -80,7 +80,13 @@ export const profileConfig: ProfileConfig = {
 // 例：{ title: "歌名", artist: "作者", src: "/music/01-track.mp3" }
 export const musicConfig = {
 	enable: true,
-	tracks: [],
+	tracks: [
+		{ title: "潮汐 (Natural)", artist: "傅梦彤", src: "/music/傅梦彤 - 潮汐 (Natural).mp3", cover: "/music/covers/傅梦彤 - 潮汐 (Natural).jpg" },
+		{ title: "Dawn (黎明将至)", artist: "三角洲行动、Lithium Done", src: "/music/三角洲行动、Lithium Done - Dawn (黎明将至).mp3", cover: "/music/covers/三角洲行动、Lithium Done - Dawn (黎明将至).jpg" },
+		{ title: "Ass Like That (0.9X版)", artist: "Eminem、ST.one", src: "/music/Eminem、ST.one - Ass Like That (0.9X版)(DJ ST.one版).mp3", cover: "/music/covers/Eminem、ST.one - Ass Like That (0.9X版)(DJ ST.one版).jpg" },
+		{ title: "One More Last Time", artist: "Henry Young、Ashley Alisha", src: "/music/Henry Young、Ashley Alisha - One More Last Time.mp3", cover: "/music/covers/Henry Young、Ashley Alisha - One More Last Time.jpg" },
+		{ title: "Edge of My Life", artist: "Manafest", src: "/music/Manafest - Edge of My Life.mp3", cover: "/music/covers/Manafest - Edge of My Life.jpg" },
+	],
 };
 
 export const licenseConfig: LicenseConfig = {
