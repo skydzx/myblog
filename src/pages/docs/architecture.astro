@@ -23,12 +23,36 @@ const routeTableBody = `
 			<a href="/docs/" class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">← 返回文档</a>
 
 			<h1>架构文档</h1>
-			<p class="text-[var(--text-muted)]">最后更新：2026-07-26。本文件为项目真源文档，所有开发规范和接口定义以此为准。</p>
+			<p class="text-[var(--text-muted)]">最后更新：2026-08-03。本文件为项目真源文档，所有开发规范和接口定义以此为准。文档须随开发进度随时更新。</p>
 
 			<hr class="my-8 border-[var(--border-color)]" />
 
 			<h2 id="overview">1. 项目概览</h2>
 			<p>棋密（Polybius Blog）基于 Astro 5 + Fuwari 主题构建，部署于 Cloudflare Pages。静态站点，内容由 Markdown 驱动，构建时生成 HTML。</p>
+
+<h3>布局模式</h3>
+<table>
+    <thead><tr><th>页面</th><th>布局</th><th>说明</th></tr></thead>
+    <tbody>
+        <tr><td>主页</td><td>两栏</td><td>左个人信息侧栏 + 中终端hero / 文章列表 / 知识库精选</td></tr>
+        <tr><td>文章页（内容页）</td><td>三栏（lg+）</td><td>左侧栏 + 中正文 + 右 TOC；容器加宽到 <code>PAGE_WIDTH_WIDE</code>（86rem），TOC 为网格第三列、<code>sticky</code> 跟随</td></tr>
+        <tr><td>移动端</td><td>单栏</td><td>三栏折叠，TOC 隐藏，footer 置底（min-height + flex）</td></tr>
+    </tbody>
+</table>
+
+<h3>关键组件（src/components/）</h3>
+<table>
+    <thead><tr><th>组件</th><th>作用</th><th>挂载</th></tr></thead>
+    <tbody>
+        <tr><td><code>TerminalHero.astro</code></td><td>首页终端欢迎区（whoami + 站点统计）</td><td>SSR</td></tr>
+        <tr><td><code>TerminalStats.svelte</code></td><td>uptime / 总字数 / 最后更新，打字机 + 数字滚动</td><td>client:load</td></tr>
+        <tr><td><code>KbFeatured.astro</code></td><td>首页知识库精选卡片区（最近 6 篇）</td><td>SSR</td></tr>
+        <tr><td><code>SiteLogo.astro</code></td><td>导航栏 Polybius 密码格 Logo</td><td>SSR</td></tr>
+        <tr><td><code>Announcement.svelte</code> / <code>MiniPlayer.svelte</code> / <code>ViewCount.svelte</code></td><td>左栏公告卡（可关闭）/ 音乐播放器（Web Audio 可视化）/ 浏览量占位</td><td>client:load</td></tr>
+    </tbody>
+</table>
+
+<p><strong>全局脚本</strong>：Layout.astro 内置 mermaid 懒加载渲染器（仅当存在 <code>.mermaid</code> 元素时 <code>import("mermaid")</code> 并 <code>run()</code>，挂 DOMContentLoaded + astro:page-load），无需每个页面单独引 mermaid。</p>
 
 			<hr class="my-8 border-[var(--border-color)]" />
 
@@ -118,8 +142,14 @@ const routeTableBody = `
 					<tr><td><code>banner.enable</code></td><td>boolean</td><td>false</td><td>是否启用首页顶部 Banner</td></tr>
 					<tr><td><code>toc.enable</code></td><td>boolean</td><td>true</td><td>是否启用文章目录</td></tr>
 					<tr><td><code>toc.depth</code></td><td>1|2|3</td><td>2</td><td>目录最大标题层级</td></tr>
+					<tr><td><code>siteStart</code></td><td>string</td><td>2026-07-26</td><td>建站起始日（YYYY-MM-DD），用于终端 hero 的 uptime 统计</td></tr>
+					<tr><td><code>announcement.enable</code></td><td>boolean</td><td>true</td><td>是否显示左栏公告卡</td></tr>
+					<tr><td><code>announcement.title / content / link / linkText</code></td><td>string</td><td>公告 / 欢迎语 / /kb/ / 进入知识库 →</td><td>公告卡内容与链接，× 关闭后写入 localStorage</td></tr>
 				</tbody>
 			</table>
+
+			<h3>musicConfig（独立导出，非 siteConfig 字段）</h3>
+			<p>音乐播放器音轨列表：<code>tracks</code> 数组，每项含 <code>title</code> / <code>artist</code> / <code>src</code> / <code>cover?</code>。音源放 <code>public/music/</code>（走本站 CDN），封面在同目录 <code>covers/</code>。</p>
 
 			<h3>navBarConfig</h3>
 			<p>导航栏链接数组。内置预设：Home、Archive、About。自定义链接字段：name（显示文字）、url（地址）、external（是否外部链接）。</p>
@@ -131,7 +161,7 @@ const routeTableBody = `
 					<tr><td><code>avatar</code></td><td>string</td><td>头像路径，相对于 src/</td></tr>
 					<tr><td><code>name</code></td><td>string</td><td>昵称，显示在侧边栏</td></tr>
 					<tr><td><code>bio</code></td><td>string</td><td>简介，显示在侧边栏</td></tr>
-					<tr><td><code>links</code></td><td>array</td><td>社交链接，每项包含 name url icon</td></tr>
+					<tr><td><code>links</code></td><td>array</td><td>社交链接（当前 GitHub + RSS），渲染为侧边栏图标行，配置驱动</td></tr>
 				</tbody>
 			</table>
 
@@ -150,7 +180,7 @@ const routeTableBody = `
 					<tr><td>rehype-slug</td><td>Rehype</td><td>标题生成 id，用于锚点和 TOC</td></tr>
 					<tr><td>rehype-autolink-headings</td><td>Rehype</td><td>自动添加标题锚点链接</td></tr>
 					<tr><td>astro-expressive-code</td><td>Integration</td><td>代码块语法高亮（行号、折叠）</td></tr>
-					<tr><td>@astrojs/svelte</td><td>Integration</td><td>Svelte 组件（搜索框、明暗切换）</td></tr>
+					<tr><td>@astrojs/svelte</td><td>Integration</td><td>Svelte 组件（搜索、明暗切换、终端统计、公告、音乐播放器、浏览量）</td></tr>
 					<tr><td>@astrojs/tailwind</td><td>Integration</td><td>Tailwind CSS 集成</td></tr>
 					<tr><td>@astrojs/sitemap</td><td>Integration</td><td>自动生成 sitemap.xml</td></tr>
 					<tr><td>@swup/astro</td><td>Integration</td><td>页面切换动画</td></tr>

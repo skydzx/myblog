@@ -8,7 +8,7 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 			<a href="/docs/" class="text-sm text-[var(--text-muted)] no-underline hover:text-[var(--primary)] transition mb-4 inline-block">← 返回文档</a>
 
 			<h1>开发规范</h1>
-			<p class="text-[var(--text-muted)]">最后更新：2026-07-26。本文件为项目开发真源文档，所有代码提交必须符合以下规范。</p>
+			<p class="text-[var(--text-muted)]">最后更新：2026-08-03。本文件为项目开发真源文档，所有代码提交必须符合以下规范。</p>
 
 			<hr class="my-8 border-[var(--border-color)]" />
 
@@ -20,6 +20,7 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 				<li>类型、注释、错误处理能帮助后续维护</li>
 				<li>不随意引入新依赖，新增依赖必须在提交说明里写清用途</li>
 				<li>代码天然可测试</li>
+				<li><strong>文档随代码更新</strong>：新增/修改组件、配置项、常量、路由、token、踩到的坑，必须同步更新架构文档（<code>docs/architecture</code>）、设计规范（<code>docs/design-spec</code>）、踩坑记录（<code>src/content/kb/</code>）——文档滞后等于代码埋雷</li>
 			</ul>
 
 			<hr class="my-8 border-[var(--border-color)]" />

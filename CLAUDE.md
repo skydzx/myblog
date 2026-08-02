@@ -22,6 +22,7 @@
 3. **目录边界不可越** — `src/pages/` 只管路由编排，`src/components/` 只管 UI 渲染，`src/utils/` 只放纯函数，互不越界
 4. **复用优先** — 同一视觉模式出现 ≥2 次必须提取为组件或 token
 5. **暗色默认** — 所有颜色定义双模式（light / dark），不做单模式组件
+6. **文档随代码更新** — 新增/修改组件、配置、常量、路由、token，或踩到新坑，必须同步更新 `docs/architecture`、`docs/design-spec`、`docs/dev-conventions` 及 `src/content/kb/` 踩坑记录
 
 ## 技术栈锁定
 
