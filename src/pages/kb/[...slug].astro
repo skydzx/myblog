@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
 
 type SubcatItem = { name: string; count: number };
 
@@ -91,7 +92,8 @@ if (entry) {
 		const id = e.id.replace(/\.md$/, "");
 		if (!id.startsWith(`${prefixStr}/`)) continue;
 		const parts = id.split("/");
-		if (parts.length > prefixLen) {
+		// 仅当路径比「当前节点+1」更深时才算真正的子分类目录（避免把文章文件名误判为子分类）
+		if (parts.length > prefixLen + 1) {
 			subcategories.add(parts[prefixLen]);
 		}
 	}
@@ -192,12 +194,13 @@ if (entry) {
 								{categoryData.subcatList.map((sub) => (
 									<a
 										href={`/kb/${categoryData.prefixStr}/${sub.name}/`}
-										class="card-base px-4 py-3 flex items-center justify-between transition hover:border-[var(--primary)] hover:shadow-sm no-underline"
+										class="card-base px-4 py-3 flex items-center gap-2 transition border border-[var(--line-color)] hover:border-[var(--primary)] no-underline"
 									>
-										<span class="font-medium text-[var(--text)]">{sub.name}</span>
+										<span class="font-medium text-[var(--text)] flex-1 truncate">{sub.name}</span>
 										<span class="text-xs text-[var(--text-muted)] bg-[var(--card-bg-secondary)] px-2 py-0.5 rounded-full">
 											{sub.count}
 										</span>
+										<Icon name="material-symbols:chevron-right-rounded" class="text-[var(--text-muted)] text-xl shrink-0"></Icon>
 									</a>
 								))}
 							</div>
@@ -213,19 +216,22 @@ if (entry) {
 									const id = a.id.replace(/\.md$/, "");
 									const href = `/kb/${id}/`;
 									return (
-										<a href={href} class="card-base px-4 py-3 block transition hover:border-[var(--primary)] hover:shadow-sm no-underline">
+										<a href={href} class="card-base px-4 py-3 block transition border border-[var(--line-color)] hover:border-[var(--primary)] no-underline">
 											<div class="flex items-start justify-between gap-4">
-												<div>
+												<div class="min-w-0">
 													<div class="font-medium text-[var(--text)]">{a.data.title}</div>
 													{a.data.summary ? (
 														<p class="text-sm text-[var(--text-muted)] mt-1 line-clamp-1">{a.data.summary}</p>
 													) : null}
 												</div>
-												{a.data.date ? (
-													<span class="text-xs text-[var(--text-muted)] whitespace-nowrap shrink-0 mt-0.5">
-														{a.data.date.toISOString().slice(0, 10)}
-													</span>
-												) : null}
+												<div class="flex items-center gap-3 shrink-0">
+													{a.data.date ? (
+														<span class="text-xs text-[var(--text-muted)] whitespace-nowrap">
+															{a.data.date.toISOString().slice(0, 10)}
+														</span>
+													) : null}
+													<Icon name="material-symbols:chevron-right-rounded" class="text-[var(--text-muted)] text-xl"></Icon>
+												</div>
 											</div>
 										</a>
 									);

@@ -23,5 +23,5 @@ const len = page.data.length;
     {page.currentPage === 1 && <TerminalHero></TerminalHero>}
     <PostPage page={page}></PostPage>
     {page.currentPage === 1 && <KbFeatured></KbFeatured>}
-    <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
+    {page.lastPage > 1 && <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>}
 </MainGridLayout>

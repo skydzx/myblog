@@ -565,3 +565,40 @@ if (window.swup) {
 	document.addEventListener("swup:enable", setup)
 }
 </script>
+
+<script>
+// 全局 Mermaid 渲染：懒加载，仅当页面存在 .mermaid 元素时加载 mermaid 并渲染
+// 覆盖：初始加载 + Swup 页面切换（astro:page-load）
+async function renderMermaid() {
+	const nodes = Array.from(
+		document.querySelectorAll<HTMLElement>(".mermaid"),
+	).filter((node) => !node.querySelector("svg"));
+	if (nodes.length === 0) return;
+
+	const isDark = document.documentElement.classList.contains("dark");
+	try {
+		const { default: mermaid } = await import("mermaid");
+		mermaid.initialize({
+			startOnLoad: false,
+			theme: isDark ? "dark" : "default",
+			themeVariables: {
+				fontFamily: "'JetBrains Mono Variable', ui-monospace, monospace",
+			},
+		});
+		await mermaid.run({ nodes });
+	} catch (error) {
+		console.error("[mermaid] render failed:", error);
+		nodes.forEach((node) => {
+			node.innerHTML =
+				'<div class="text-sm text-[var(--terminal-muted)]">图表渲染失败，请检查 Mermaid 语法。</div>';
+		});
+	}
+}
+
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", renderMermaid);
+} else {
+	renderMermaid();
+}
+document.addEventListener("astro:page-load", renderMermaid);
+</script>
