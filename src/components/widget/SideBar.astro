@@ -10,13 +10,19 @@ interface Props {
 }
 
 const className = Astro.props.class;
+
+// 知识库 / 文档页展示的是知识库分类，而非博客文章的「分类 / 标签」，此处隐藏避免语境错位
+const pathname = Astro.url.pathname;
+const isKbOrDocs = pathname.startsWith("/kb/") || pathname.startsWith("/docs/");
 ---
 <div id="sidebar" class:list={[className, "w-full"]}>
     <div class="flex flex-col w-full gap-4 mb-4">
         <Profile></Profile>
     </div>
-    <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
-        <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
-        <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
-    </div>
+    {!isKbOrDocs && (
+        <div id="sidebar-sticky" class="transition-all duration-700 flex flex-col w-full gap-4 top-4 sticky top-4">
+            <Categories class="onload-animation" style="animation-delay: 150ms"></Categories>
+            <Tag class="onload-animation" style="animation-delay: 200ms"></Tag>
+        </div>
+    )}
 </div>

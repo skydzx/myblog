@@ -45,6 +45,10 @@ define({
 
   --deep-text: oklch(0.25 0.02 var(--hue))
 
+  /* 正文与次要文字（代码中大量使用 --text-muted，此前缺失导致回退纯黑） */
+  --text: oklch(0.25 0.02 var(--hue)) oklch(0.87 0.02 var(--hue))
+  --text-muted: oklch(0.45 0.02 var(--hue)) oklch(0.60 0.02 var(--hue))
+
   --title-active: oklch(0.6 0.1 var(--hue))
 
   --line-divider: black(0.08) white(0.08)

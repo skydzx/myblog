@@ -117,5 +117,13 @@
         overflow-x: auto;
         margin: 1em 0;
     }
-    
+
+    /* 表格窄屏可横向滚动，避免撑破布局 */
+    table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
 }
