@@ -62,3 +62,28 @@ BurpSuite 高级用法：
 ---
 
 > **一句话总结**：爆破的核心是"字典 + 合适模式 + 处理动态 token"。低等级直接 Sniper 按长度找答案；高等级要靠宏/正则提取 token，把"动态验证"变成"可爆破"。
+
+---
+
+## 📸 原文截图
+
+### Brute-Force
+
+![Brute-Force 1](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/01.png)
+
+![Brute-Force 2](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/02.png)
+
+![Brute-Force 3](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/03.png)
+
+![Brute-Force 4](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/04.png)
+
+![Brute-Force 5](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/05.png)
+
+![Brute-Force 6](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/06.png)
+
+![Brute-Force 7](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/07.png)
+
+![Brute-Force 8](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/08.png)
+
+![Brute-Force 9](/images/kb/网络安全/渗透测试/burp暴力破解/Brute-Force/09.png)
+

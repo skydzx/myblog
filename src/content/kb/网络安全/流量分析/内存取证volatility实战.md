@@ -105,3 +105,62 @@ volatility.exe -f MemoryLife.raw --profile=Win7SP1x64 memdump -p <PID> -D .
 ---
 
 > **一句话总结**：内存取证固定套路 = `imageinfo` 判断系统 → `pslist`/`netscan` 找目标 → `memdump` 导出进程内存 → 010/GIMP 分析。工具进程（nc/mspaint）往往是出题点。
+
+---
+
+## 📸 原文截图
+
+### CTF-内存取证-tlcp流量分析-23092730105-董智雄
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 1](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/01.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 2](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/02.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 3](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/03.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 4](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/04.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 5](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/05.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 6](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/06.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 7](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/07.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 8](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/08.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 9](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/09.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 10](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/10.jpeg)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 11](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/11.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 12](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/12.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 13](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/13.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 14](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/14.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 15](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/15.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 16](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/16.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 17](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/17.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 18](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/18.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 19](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/19.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 20](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/20.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 21](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/21.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 22](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/22.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 23](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/23.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 24](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/24.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 25](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/25.png)
+
+![CTF-内存取证-tlcp流量分析-23092730105-董智雄 26](/images/kb/网络安全/流量分析/内存取证volatility实战/CTF-内存取证-tlcp流量分析-23092730105-董智雄/26.png)
+

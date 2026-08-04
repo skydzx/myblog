@@ -146,3 +146,128 @@ x86 栈帧结构（高→低地址）：
 ---
 
 > **一句话总结**：逆向题常见三类——① 输入变换（XOR/替换表）验证，② 游戏/交互逻辑控制 flag 触发，③ 直接 strcmp 内存常量。核心是**找到加密数据 + 密钥/变换规则，写脚本还原**。
+
+---
+
+## 📸 原文截图
+
+### 23092730105-董智雄
+
+![23092730105-董智雄 1](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/01.png)
+
+![23092730105-董智雄 2](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/02.png)
+
+![23092730105-董智雄 3](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/03.png)
+
+![23092730105-董智雄 4](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/04.png)
+
+![23092730105-董智雄 5](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/05.png)
+
+![23092730105-董智雄 6](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/06.png)
+
+![23092730105-董智雄 7](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/07.png)
+
+![23092730105-董智雄 8](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/08.png)
+
+![23092730105-董智雄 9](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/09.png)
+
+![23092730105-董智雄 10](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/10.png)
+
+![23092730105-董智雄 11](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/11.png)
+
+![23092730105-董智雄 12](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/12.png)
+
+![23092730105-董智雄 13](/images/kb/网络安全/逆向/ctf逆向实战合集/23092730105-董智雄/13.png)
+
+### MingYue-exe-reverse-23092730105-董智雄-副本
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 1](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/01.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 2](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/02.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 3](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/03.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 4](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/04.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 5](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/05.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 6](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/06.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 7](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/07.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 8](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/08.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 9](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/09.png)
+
+![MingYue-exe-reverse-23092730105-董智雄-副本 10](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄-副本/10.png)
+
+### MingYue-exe-reverse-23092730105-董智雄
+
+![MingYue-exe-reverse-23092730105-董智雄 1](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/01.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 2](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/02.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 3](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/03.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 4](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/04.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 5](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/05.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 6](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/06.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 7](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/07.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 8](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/08.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 9](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/09.png)
+
+![MingYue-exe-reverse-23092730105-董智雄 10](/images/kb/网络安全/逆向/ctf逆向实战合集/MingYue-exe-reverse-23092730105-董智雄/10.png)
+
+### reverse_task-董智雄-23092730105
+
+![reverse_task-董智雄-23092730105 1](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/01.png)
+
+![reverse_task-董智雄-23092730105 2](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/02.png)
+
+![reverse_task-董智雄-23092730105 3](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/03.png)
+
+![reverse_task-董智雄-23092730105 4](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/04.png)
+
+![reverse_task-董智雄-23092730105 5](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/05.png)
+
+![reverse_task-董智雄-23092730105 6](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/06.png)
+
+![reverse_task-董智雄-23092730105 7](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/07.png)
+
+![reverse_task-董智雄-23092730105 8](/images/kb/网络安全/逆向/ctf逆向实战合集/reverse_task-董智雄-23092730105/08.png)
+
+
+
+### 董智雄-23092730105
+
+![董智雄-23092730105 1](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/01.png)
+
+![董智雄-23092730105 2](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/02.png)
+
+![董智雄-23092730105 3](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/03.png)
+
+![董智雄-23092730105 4](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/04.png)
+
+![董智雄-23092730105 5](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/05.png)
+
+![董智雄-23092730105 6](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/06.png)
+
+![董智雄-23092730105 7](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/07.png)
+
+![董智雄-23092730105 8](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/08.png)
+
+![董智雄-23092730105 9](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/09.png)
+
+![董智雄-23092730105 10](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/10.png)
+
+![董智雄-23092730105 11](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/11.png)
+
+![董智雄-23092730105 12](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/12.png)
+
+![董智雄-23092730105 13](/images/kb/网络安全/逆向/ctf逆向实战合集/董智雄-23092730105/13.png)
+

@@ -165,3 +165,28 @@ GDB / x64dbg / OllyDbg 断点、单步（F8/F9）
 ---
 
 > **一句话总结**：逆向从"识格式（PE/ELF）→ 认寄存器/汇编 → 懂调用约定/栈帧"起步，CTF 常见是"找加密逻辑（XOR/链表）写脚本还原"，漏洞利用则走向"溢出 + ROP + 绕过 ASLR/NX/Canary"。
+
+---
+
+## 📸 原文截图
+
+### reverse
+
+![reverse 1](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/01.png)
+
+![reverse 2](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/02.png)
+
+![reverse 3](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/03.png)
+
+![reverse 4](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/04.png)
+
+![reverse 5](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/05.png)
+
+![reverse 6](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/06.png)
+
+![reverse 7](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/07.png)
+
+![reverse 8](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/08.png)
+
+![reverse 9](/images/kb/网络安全/逆向/reverse逆向基础速查/reverse/09.png)
+
